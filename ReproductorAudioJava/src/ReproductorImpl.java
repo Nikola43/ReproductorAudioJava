@@ -158,7 +158,6 @@ public class ReproductorImpl implements Reproductor
         //Importamos el decodificador de audio ffmpeg para reproducir audio de diferentes formatos
         String jffmpegAudioDecoder = "net.sourceforge.jffmpeg.AudioDecoder";
         Codec codecAudio = null;
-        int numeroCancion = 0;
         
         // Instanciamos un nuevo objeto tipo Codec al que le pasamos como parametro el decodificador ffmpeg 
         try 
