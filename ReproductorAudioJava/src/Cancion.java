@@ -17,9 +17,7 @@ public interface Cancion
 {
 	//Metodos consultores
 	public String getRuta();
-	public String getNombre();
 	
 	//Metodos modificadores
 	public void setRuta(String ruta);
-    public void setNombre(String nombre);
 }

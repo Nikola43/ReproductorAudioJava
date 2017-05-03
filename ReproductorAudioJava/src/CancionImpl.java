@@ -34,9 +34,9 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
 //------------------------------- PROPIEDADES -----------------------------------------------//
     //BASICAS
     private String ruta;
-    private String nombre;
 
     //DERIVADAS
+    //String nombre
 
     //COMPARTIDAS
 //------------------------------- FIN PROPIEDADES --------------------------------------------//
@@ -46,21 +46,18 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     public CancionImpl()
     {
         ruta = null;
-        nombre = null;
     }
 
     //CONSTRUCTOR SOBRECARGADO
-    public CancionImpl(String ruta, String nombre, int numeroEnLista)
+    public CancionImpl(String ruta)
     {
         this.ruta = ruta;
-        this.nombre = nombre;
     }
 
     //CONSTRUCTOR DE COPIA
     public CancionImpl(CancionImpl cancion)
     {
         this.ruta = cancion.getRuta();
-        this.nombre = cancion.getNombre();
     }
 //------------------------------- FIN CONSTRUCTORES ------------------------------------------//
 
@@ -69,18 +66,9 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     {
         return ruta;
     }
-    public String getNombre()
-    {
-        return nombre;
-    }
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
-    public void setNombre(String nombre)
-    {
-        this.nombre = nombre;
-    }
-
     public void setRuta(String ruta)
     {
         this.ruta = ruta;
@@ -88,16 +76,11 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
 //------------------------------- METODOS SOBRESCRITOS ---------------------------------------//
-//------------------------------- FIN METODOS SOBRESCRITOS -----------------------------------//
-
-//------------------------------- METODOS AÑADIDOS -------------------------------------------//
-//------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
-//------------------------------- METODOS SOBRESCRITOS ---------------------------------------//
     @Override
     public String toString()
     {
         String toString;
-        toString = ruta+","+nombre;
+        toString = ruta;
         return toString;
     }
 
@@ -105,7 +88,7 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     public int hashCode()
     {
         int hashCode;
-        hashCode = Integer.parseInt(nombre)*25+Integer.parseInt(ruta) * 13;
+        hashCode = 25+Integer.parseInt(ruta) * 13;
         return hashCode;
     }
 
@@ -148,11 +131,11 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
 
         if ( cancion != null )
         {
-            if ( this.getNombre().compareTo(cancion.getNombre()) > 0 )
+            if ( this.getRuta().compareTo(cancion.getRuta()) > 0 )
             {
                 compareTo = 1;
             }
-            if ( this.getNombre().compareTo(cancion.getNombre()) < 0 )
+            if ( this.getRuta().compareTo(cancion.getRuta()) < 0 )
             {
                 compareTo = -1;
             }
@@ -190,7 +173,7 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
             CancionImpl cancion = (CancionImpl) object;
 
             //Si tienen el mismo nombre son canciones iguales
-            if (this.getNombre().compareTo(cancion.getNombre()) == 0)
+            if (this.getRuta().compareTo(cancion.getRuta()) == 0)
             {
                 esIgual = true;
             }
@@ -198,4 +181,8 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
         return esIgual;
     }
 //------------------------------- FIN METODOS SOBRESCRITOS -----------------------------------//
+
+//------------------------------- METODOS AÑADIDOS -------------------------------------------//
+//------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
+
 }
