@@ -2,6 +2,7 @@ package Clases;
 /*
     PROPIEDADES
         BASICAS
+            String nombre                     | consultable y modificable
             ArrayList<Cancion> listaCanciones | consultable y modificable
 
         DERIVADAS
@@ -16,12 +17,14 @@ import java.util.ArrayList;
 public interface ListaDeReproduccion
 {
 //------------------------------- METODOS CONSULTORES ----------------------------------------//
-    ArrayList<CancionImpl> getListaCanciones();
-    int getNumeroCanciones();
+    public String getNombre();
+    public ArrayList<CancionImpl> getListaCanciones();
+    public int getNumeroCanciones();
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
-    void setListaCanciones(ArrayList<CancionImpl> listaCanciones);
+    public void setNombre(String nombre);
+    public void setListaCanciones(ArrayList<CancionImpl> listaCanciones);
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
 //------------------------------- METODOS AÑADIDOS -------------------------------------------//
