@@ -15,10 +15,11 @@ public class TestGestionListaReproduccion
         System.out.println("Es una lista: "+gestionListaReproduccion.esListaReproduccion("ListasDeReproduccion/ListaReproduccion.lis"));
 
         //Test mostrar canciones
-        gestionListaReproduccion.mostrarCancionesDisponibles("Canciones/");
+        //gestionListaReproduccion.mostrarCancionesDisponibles("Canciones/");
 
         //Test seleccionar cancion
         gestionListaReproduccion.crearListaReproduccion();
+        gestionListaReproduccion.leerListaDeReproduccion("ListasDeReproduccion/ListaReproduccion.lis");
         //System.out.println("Cancion: "+gestionListaReproduccion.seleccionarCancion());
     }
 }

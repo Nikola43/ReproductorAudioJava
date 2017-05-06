@@ -5,6 +5,9 @@ import Clases.ListaDeReproduccion;
 import Clases.ListaDeReproduccionImpl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -102,7 +105,7 @@ public class GestionListaReproduccion
     public String seleccionarCancion()
     {
         Scanner scanner = new Scanner(System.in);
-        String rutaCancion = "Canciones/";
+        String rutaCancion;
 
         File ficheroCancion;
 
@@ -110,7 +113,7 @@ public class GestionListaReproduccion
         {
             //Pedimos al usuario que introduzca una cancion de la lista
             System.out.print("\nIntroduzca el nombre de la cancion que desea seleccionar: ");
-            rutaCancion += scanner.nextLine();
+            rutaCancion = "Canciones/"+scanner.nextLine();
             ficheroCancion = new File(rutaCancion);
 
             //Si el fichero no existe
@@ -147,8 +150,60 @@ public class GestionListaReproduccion
        Entradas/Salidas:
            -
      */
-    public void guardarListaReproduccion(ListaDeReproduccion listaDeReproduccion)
+    public void guardarListaReproduccion(ListaDeReproduccionImpl listaDeReproduccion)
     {
+        File file = new File(listaDeReproduccion.getNombre());
+        RandomAccessFile randomAccessFile = null;
+
+        ArrayList<CancionImpl> cancions = new ArrayList<>();
+        cancions = listaDeReproduccion.getListaCanciones();
+
+        int numeroCanciones = 0;
+        numeroCanciones = listaDeReproduccion.getNumeroCanciones();
+
+        String nombreListaReproduccion;
+
+        nombreListaReproduccion = listaDeReproduccion.getNombre();
+
+
+        try
+        {
+            randomAccessFile = new RandomAccessFile(file, "rw");
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+        try
+        {
+            System.out.println(randomAccessFile.getFilePointer());
+
+            randomAccessFile.write(nombreListaReproduccion.getBytes());
+            //randomAccessFile.seek(20);
+
+            System.out.println(randomAccessFile.getFilePointer());
+
+            randomAccessFile.write(String.valueOf(numeroCanciones).getBytes());
+
+            //randomAccessFile.seek(40);
+
+            System.out.println(randomAccessFile.getFilePointer());
+
+            randomAccessFile.write(cancions.get(0).getNombre().getBytes());
+
+            System.out.println(randomAccessFile.getFilePointer());
+
+            randomAccessFile.write(cancions.get(0).getRuta().getBytes());
+
+            System.out.println(randomAccessFile.getFilePointer());
+
+            randomAccessFile.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
     }
 
@@ -236,11 +291,41 @@ public class GestionListaReproduccion
         listaDeReproduccion.setListaCanciones(listaDeCanciones);
 
         //Guardamos lista de reproduccion en el disco duro del sistema
+        guardarListaReproduccion(listaDeReproduccion);
 
         //Si la lista existe, se muestra un mensaje que confirma que se a creado correctamente
         if ( ficheroListaReproduccion.exists() == true)
         {
             System.out.println("\nSe ha creado la lista de reproduccion correctamente");
         }
+    }
+
+    public void leerListaDeReproduccion(String ficheroListaDeReproduccion)
+    {
+        //--------------------------------------------------------//
+
+        File file = new File(ficheroListaDeReproduccion);
+        RandomAccessFile randomAccessFile = null;
+
+        byte[] propiedadLeida = new byte[20];
+
+        String s;
+
+        try {
+            randomAccessFile.seek(0);
+            randomAccessFile.read(propiedadLeida, 0, 20);
+
+            s = new String(propiedadLeida);
+            System.out.println(s);
+
+            randomAccessFile.seek(20);
+            randomAccessFile.read(propiedadLeida, 0, 20);
+
+            s = new String(propiedadLeida);
+            System.out.println(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
