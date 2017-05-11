@@ -155,16 +155,12 @@ public class GestionListaReproduccion
         File file = new File(listaDeReproduccion.getNombre());
         RandomAccessFile randomAccessFile = null;
 
-        ArrayList<CancionImpl> cancions = new ArrayList<>();
-        cancions = listaDeReproduccion.getListaCanciones();
+        long posicion = 0;
 
-        int numeroCanciones = 0;
-        numeroCanciones = listaDeReproduccion.getNumeroCanciones();
+        ArrayList<CancionImpl> list;
+        list = listaDeReproduccion.getListaCanciones();
 
-        String nombreListaReproduccion;
-
-        nombreListaReproduccion = listaDeReproduccion.getNombre();
-
+        int tamanaio = 0;
 
         try
         {
@@ -175,35 +171,40 @@ public class GestionListaReproduccion
             e.printStackTrace();
         }
 
+        for ( int i = 0; i < listaDeReproduccion.getNumeroCanciones(); i++ )
+        {
+            try
+            {
+                randomAccessFile.seek(posicion);
+                tamanaio = list.get(i).getRuta().length();
+
+                String t = String.valueOf(tamanaio);
+
+                randomAccessFile.write(t.getBytes());
+                System.out.println(randomAccessFile.getFilePointer());
+
+                randomAccessFile.write(list.get(i).getRuta().getBytes());
+
+                posicion = randomAccessFile.getFilePointer();
+                System.out.println("Posicion: "+posicion);
+
+
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
         try
         {
-            System.out.println(randomAccessFile.getFilePointer());
-
-            randomAccessFile.write(nombreListaReproduccion.getBytes());
-            //randomAccessFile.seek(20);
-
-            System.out.println(randomAccessFile.getFilePointer());
-
-            randomAccessFile.write(String.valueOf(numeroCanciones).getBytes());
-
-            //randomAccessFile.seek(40);
-
-            System.out.println(randomAccessFile.getFilePointer());
-
-            randomAccessFile.write(cancions.get(0).getNombre().getBytes());
-
-            System.out.println(randomAccessFile.getFilePointer());
-
-            randomAccessFile.write(cancions.get(0).getRuta().getBytes());
-
-            System.out.println(randomAccessFile.getFilePointer());
-
             randomAccessFile.close();
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
+
 
     }
 
@@ -267,7 +268,7 @@ public class GestionListaReproduccion
             try
             {
                 cancionAuxiliar = new CancionImpl(ficheroCancionAuxiliar.toURI().toURL().toString());
-                System.out.println(cancionAuxiliar.getNombre()+", "+cancionAuxiliar.getRuta());
+                System.out.println(cancionAuxiliar.getNombre()+", "+cancionAuxiliar.getRuta()+","+cancionAuxiliar.getRuta().getBytes().length);
             }
             catch (MalformedURLException e)
             {
@@ -307,23 +308,37 @@ public class GestionListaReproduccion
         File file = new File(ficheroListaDeReproduccion);
         RandomAccessFile randomAccessFile = null;
 
-        byte[] propiedadLeida = new byte[20];
+         int posicion = 1;
+         int contador = 0;
+         long tamanioTotal = file.length();
 
-        String s;
+        byte[] tamanioPropiedadLeida = new byte[1];
 
-        try {
-            randomAccessFile.seek(0);
-            randomAccessFile.read(propiedadLeida, 0, 20);
+        byte[] propiedadLeida = new byte[1000];
+        System.out.println(propiedadLeida.length);
+
+        String s = " ";
+
+        while ( posicion < tamanioTotal )
+        try
+        {
+
+            randomAccessFile = new RandomAccessFile(file, "r");
+
+            randomAccessFile.read(tamanioPropiedadLeida, posicion - 1, 1);
+
+            randomAccessFile.read(propiedadLeida, posicion, tamanioPropiedadLeida.length);
+
+            posicion += tamanioPropiedadLeida.length;
+
+            randomAccessFile.seek(posicion);
 
             s = new String(propiedadLeida);
             System.out.println(s);
 
-            randomAccessFile.seek(20);
-            randomAccessFile.read(propiedadLeida, 0, 20);
-
-            s = new String(propiedadLeida);
-            System.out.println(s);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
 

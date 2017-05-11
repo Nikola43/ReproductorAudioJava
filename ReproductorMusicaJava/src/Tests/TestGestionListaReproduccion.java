@@ -18,8 +18,8 @@ public class TestGestionListaReproduccion
         //gestionListaReproduccion.mostrarCancionesDisponibles("Canciones/");
 
         //Test seleccionar cancion
-        gestionListaReproduccion.crearListaReproduccion();
-        gestionListaReproduccion.leerListaDeReproduccion("ListasDeReproduccion/ListaReproduccion.lis");
+        //gestionListaReproduccion.crearListaReproduccion();
+        gestionListaReproduccion.leerListaDeReproduccion("whatafuck.lis");
         //System.out.println("Cancion: "+gestionListaReproduccion.seleccionarCancion());
     }
 }
