@@ -152,6 +152,7 @@ public class GestionListaReproduccion
      */
     public void guardarListaReproduccion(ListaDeReproduccionImpl listaDeReproduccion)
     {
+<<<<<<< HEAD
         File file = new File(listaDeReproduccion.getNombre());
         RandomAccessFile randomAccessFile = null;
 
@@ -161,10 +162,18 @@ public class GestionListaReproduccion
         list = listaDeReproduccion.getListaCanciones();
 
         int tamanaio = 0;
+=======
+        File ficheroListaReproduccion;
+        RandomAccessFile randomAccessFile;
+        ArrayList<CancionImpl> canciones;
+
+        ficheroListaReproduccion = new File(listaDeReproduccion.getNombre());
+        canciones = listaDeReproduccion.getListaCanciones();
+>>>>>>> 63dacc8484b6d0b7122997a8515da8e604e70d13
 
         try
         {
-            randomAccessFile = new RandomAccessFile(file, "rw");
+            randomAccessFile = new RandomAccessFile(ficheroListaReproduccion, "w");
         }
         catch (FileNotFoundException e)
         {
