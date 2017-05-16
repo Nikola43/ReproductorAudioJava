@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -152,76 +149,39 @@ public class GestionListaReproduccion
         //Asignamos el fichero a un tipo file
         File ficheroListaReproduccion = new File(listaDeReproduccion.getNombre());
 
-        //Definimos el objeto para leer / escribir las canciones
-        RandomAccessFile randomAccessFile = null;
-
         //Creamos una arrayList de canciones auxiliar para escribir una a una las canciones
         ArrayList<CancionImpl> listaDeCanciones = listaDeReproduccion.getListaCanciones();
 
-        //Convertimos el tamaño de la lista en string para poner escribirlo en el fichgero
-        String tamanioListaCanciones = String.valueOf(listaDeReproduccion.getNumeroCanciones());
+        FileOutputStream fileOutputStream;
+        ObjectOutputStream objectOutputStream;
 
-        //Variable para controlar la posicion del puntero
-        long posicionActual = 0;
-
-        //Abrimos el fichero
         try
         {
-            randomAccessFile = new RandomAccessFile(ficheroListaReproduccion, "rw");
+            if ( ficheroListaReproduccion.getTotalSpace() == 0 )
+            {
+                fileOutputStream = new FileOutputStream(ficheroListaReproduccion);
+                objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            }
+            else
+            {
+                fileOutputStream = new FileOutputStream(ficheroListaReproduccion, true);
+                objectOutputStream = new MiObjectOutputStream(fileOutputStream);
+            }
+
+            for (int i = 0; i < listaDeCanciones.size(); i++)
+            {
+                objectOutputStream.writeObject(listaDeCanciones.get(i));
+            }
         }
         catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }
-
-
-        try
-        {
-
-            //Nos posicionamos al principio del fichero
-            randomAccessFile.seek(0);
-            System.out.println("Tamaño lista "+tamanioListaCanciones);
-
-
-            //Escribimos en primer lugar el tamaño de la lista
-            randomAccessFile.write(tamanioListaCanciones.getBytes());
-
-            System.out.println("posicion tamaño lista "+randomAccessFile.getFilePointer());
-
-            //Recorremos la lista entera, escribiendo en el fichero todos sus elementos
-            for ( int i = 0; i < listaDeCanciones.size(); i++ )
-            {
-                //Guardamos el tamaño de la cancion actual
-                randomAccessFile.write(listaDeCanciones.get(i).getRuta().getBytes().length);
-                System.out.println("posicion tamaño "+randomAccessFile.getFilePointer());
-
-                posicionActual = randomAccessFile.getFilePointer();
-
-                //Guardamos la cancion
-                randomAccessFile.write(listaDeCanciones.get(i).getRuta().getBytes());
-
-
-                System.out.println("Tamaño: cancion "+listaDeCanciones.get(i).getRuta().getBytes().length);
-
-                posicionActual += listaDeCanciones.get(i).getRuta().getBytes().length;
-
-                System.out.println("Posicion ultima cancion: "+posicionActual);
-            }
-        }
         catch (IOException e)
         {
             e.printStackTrace();
         }
 
-
-        try
-        {
-            randomAccessFile.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
 
 
     }
@@ -320,90 +280,62 @@ public class GestionListaReproduccion
         }
     }
 
-    public void leerListaReproduccion(String ficheroListaDeReproduccion)
+    public void leerListaReproduccion(String nombreListaReproduccion)
     {
-        File file = new File(ficheroListaDeReproduccion);
-        RandomAccessFile randomAccessFile;
+        //Variables para leer la lista
+        File listaReproduccion = new File(nombreListaReproduccion);
+        FileInputStream fileInputStream = null;
+        ObjectInputStream objectInputStream = null;
+        int contadorCanciones = 0;
 
-        ArrayList<CancionImpl> listaDeCanciones = new ArrayList<>();
-        ArrayList<ListaDeReproduccionImpl> listaDeReproduccion = new ArrayList<>();
+        //Variable auxiliar para ir mostrando cada cancion
+        CancionImpl cancionAuxiliar;
 
-        CancionImpl cancionAuxiliar = new CancionImpl();
-        String rutaCancionAuxiliar;
-
-        int tamanioRegistros = 0;
-
-        int posicion = 1;
-
-        byte[] bufferTamanioListaCanciones = new byte[100];
-        byte[] bufferTamanioCancionLeida = new byte[100];
-        byte[] bufferCancionLeida = new byte[100];
-
-        String tamanioListaCanciones;
-        int tamanioCancionLeida;
-
-
-
-        String cancionLeida;
-
-        try
+        //Si la lista existe la mostramos por pantalla
+        if( listaReproduccion.exists() == true )
         {
-            // Abrimos el fichero en modo lectura
-            randomAccessFile = new RandomAccessFile(file, "r");
-
-            //Leermos el primer byte que contiene el tamaño de la lista
-            randomAccessFile.read(bufferTamanioListaCanciones, 0, 1);
-
-            tamanioListaCanciones = new String(bufferTamanioListaCanciones);
-
-            System.out.println(tamanioListaCanciones);
-            int i = Integer.parseInt(tamanioListaCanciones);
-            System.out.println(i);
+            System.out.println("La lista de reproduccion '"+listaReproduccion.getName()+"' contiene las siguientes canciones:");
+            try
+            {
+                fileInputStream =  new FileInputStream(listaReproduccion);
+                objectInputStream = new ObjectInputStream(fileInputStream);
 
 
 
+                while((cancionAuxiliar = (CancionImpl) objectInputStream.readObject()) != null)
+                {
+                    contadorCanciones++;
+                    System.out.println(cancionAuxiliar.getNombre());
+                }
+            }
+            catch (ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+            catch (EOFException e)
+            {
+                System.out.println("\nFin de la lista. EOF");
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
 
+            finally
+            {
+                try
+                {
+                    if( fileInputStream != null)
+                        fileInputStream.close();
 
-            posicion = (int) randomAccessFile.getFilePointer();
-            System.out.println(posicion);
-
-            randomAccessFile.read(bufferTamanioCancionLeida, posicion, 1);
-
-
-            //for ( int i = 0; i<tamanioListaCanciones; i++)
-            //{
-                //Leemos el tamaño que ocupa una cancion
-                //randomAccessFile.read(bufferTamanioCancionLeida, posicion + 1, 1);
-                //System.out.println(randomAccessFile.getFilePointer());
-
-               // tamanioCancionLeida = new String(bufferTamanioCancionLeida);
-
-                //Leemos una cancion
-                //randomAccessFile.read(bufferCancionLeida, posicion, Integer.parseInt(tamanioCancionLeida));
-               // System.out.println(randomAccessFile.getFilePointer());
-
-                //cancionLeida = new String(bufferCancionLeida);
-
-                //System.out.println(cancionLeida);
-
-                //cancionAuxiliar.setRuta(rutaCancionAuxiliar);
-
-                //listaDeCanciones.add(cancionAuxiliar);
-            //}
+                    if( objectInputStream != null)
+                        objectInputStream.close();
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-    }
-
-    public int toInt( byte[] bytes ) {
-        int result = 0;
-        for (int i = 0; i < 4; i++) {
-            result = (result << 8) - Byte.MIN_VALUE + (int) bytes[i];
-        }
-        return result;
-
     }
 }
