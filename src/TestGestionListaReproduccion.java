@@ -1,17 +1,12 @@
-package Tests;
-
-import Clases.CancionImpl;
-import Gestion.GestionListaReproduccion;
-
 public class TestGestionListaReproduccion
 {
     public static void main(String[] args)
     {
-        CancionImpl cancion = new CancionImpl("Canciones/Over.mp3");
+        CancionImpl cancion = new CancionImpl("Over.mp3");
         GestionListaReproduccion gestionListaReproduccion = new GestionListaReproduccion();
 
         //Test metodos EsUn
-        System.out.println("Es una cancion: "+gestionListaReproduccion.esCancion("Canciones/Over.mp3"));
+        System.out.println("Es una cancion: "+gestionListaReproduccion.esCancion("Over.mp3"));
         System.out.println("Es una lista: "+gestionListaReproduccion.esListaReproduccion("ListasDeReproduccion/ListaReproduccion.lis"));
 
         //Test mostrar canciones
@@ -19,7 +14,7 @@ public class TestGestionListaReproduccion
 
         //Test seleccionar cancion
         //gestionListaReproduccion.crearListaReproduccion();
-        gestionListaReproduccion.leerListaDeReproduccion("whatafuck.lis");
+        gestionListaReproduccion.leerListaReproduccion("pauloSoares.lis");
         //System.out.println("Cancion: "+gestionListaReproduccion.seleccionarCancion());
     }
 }

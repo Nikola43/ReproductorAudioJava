@@ -1,105 +1,71 @@
-package Clases;
-/*
-    PROPIEDADES
-        BASICAS
-            String ruta | consultable y modificable
-
-        DERIVADAS
-            String nombre | consultable
-
-        COMPARTIDAS
-            -
-
-    RESTRICCIONES
-        -
-
-    INTERFAZ
-        METODOS SOBRESCRITOS
-            public String toString()
-            public int hashCode()
-            public CancionImpl clone()
-            public boolean equals(Object object)
-            public int compareTo(CancionImpl cancion)
-*/
-
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializable 
+public class ListaDeReproduccionImpl implements ListaDeReproduccion, Comparable<ListaDeReproduccionImpl>, Serializable
 {
 //------------------------------- PROPIEDADES -----------------------------------------------//
     //BASICAS
-    private String ruta;
+    private String nombre;
+    private ArrayList<CancionImpl> listaCanciones;
 
     //DERIVADAS
-    //String nombre
+    //int numeroCanciones
 
     //COMPARTIDAS
+    //NINGUNA
 //------------------------------- FIN PROPIEDADES --------------------------------------------//
 
 //------------------------------- CONSTRUCTORES ----------------------------------------------//
     //CONSTRUCTOR POR DEFECTO
-    public CancionImpl()
+    public ListaDeReproduccionImpl()
     {
-        ruta = null;
+            listaCanciones = null;
     }
     //CONSTRUCTOR SOBRECARGADO
-    public CancionImpl(String ruta)
+    public ListaDeReproduccionImpl(String nombre, ArrayList<CancionImpl> listaCanciones)
     {
-        this.ruta = ruta;
+        this.nombre = nombre;
+        this.listaCanciones = listaCanciones;
     }
     //CONSTRUCTOR DE COPIA
-    public CancionImpl(CancionImpl cancion)
+    public ListaDeReproduccionImpl(ListaDeReproduccionImpl listaDeReproduccion )
     {
-        this.ruta = cancion.getRuta();
+        this.nombre = listaDeReproduccion.getNombre();
+        this.listaCanciones = listaDeReproduccion.getListaCanciones();
     }
 //------------------------------- FIN CONSTRUCTORES ------------------------------------------//
 
 //------------------------------- METODOS CONSULTORES ----------------------------------------//
     @Override
-    public String getRuta()
-    {
-        return ruta;
-    }
-    /*
-    INTERFAZ
-        Cabecera:
-            public String getNombre()
-        Descripcion:
-            Devuelve el nombre de la cancion sacandolo de la ruta del fichero
-            divide la ruta por '/' en un array de cadenas y coge el ultimo elemento
-
-            Ejemplo: /home/paulo/Escritorio/MiMusica/cancion.mp3
-                       0     1       2         3         4
-            Devolvería 'cancion.mp3'
-        Entradas:
-            -
-        Precondiciones:
-            -
-        Salidas:
-            String
-        Postcondiciones:
-            Devolvera el nombre del fichero junto con el formato
-        Entrada/Salida:
-            -
-    */
-    @Override
     public String getNombre()
     {
-        String [] rutaDescompuesta;
+        return nombre;
+    }
 
-        //Dividimos la ruta usando como separador la /
-        rutaDescompuesta = ruta.split("/");
+    @Override
+    public ArrayList<CancionImpl> getListaCanciones()
+    {
+        return listaCanciones;
+    }
 
-        //Devolvemos el ultimo elemento
-        return rutaDescompuesta[rutaDescompuesta.length - 1];
+    @Override
+    public int getNumeroCanciones()
+    {
+        return getListaCanciones().size();
     }
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
     @Override
-    public void setRuta(String ruta)
+    public void setNombre(String nombre)
     {
-        this.ruta = ruta;
+        this.nombre = nombre;
+    }
+
+    @Override
+    public void setListaCanciones(ArrayList<CancionImpl> listaCanciones)
+    {
+        this.listaCanciones = listaCanciones;
     }
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
@@ -108,7 +74,7 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     public String toString()
     {
         String toString;
-        toString = getRuta()+","+getNombre();
+        toString = getNombre()+","+getListaCanciones().toString()+","+getNumeroCanciones();
         return toString;
     }
 
@@ -116,55 +82,55 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     public int hashCode()
     {
         int hashCode;
-        hashCode = getNombre().charAt(1) + getNombre().charAt(2) + getNombre().charAt(3) / getNombre().charAt(4) * getNombre().charAt(5);
+        hashCode = getListaCanciones().toString().charAt(5) + getNombre().charAt(2) + 13 / 2 * getNumeroCanciones() - getListaCanciones().toString().charAt(3) + getListaCanciones().toString().charAt(15) - getListaCanciones().toString().charAt(5)  ;
         return hashCode;
     }
 
     @Override
-    public CancionImpl clone()
+    public ListaDeReproduccionImpl clone()
     {
-        CancionImpl clonCancion = null;
+        ListaDeReproduccionImpl clonListaDeReproduccion = null;
 
         try
         {
-            clonCancion = (CancionImpl) super.clone();
+            clonListaDeReproduccion = (ListaDeReproduccionImpl) super.clone();
         }
         catch (CloneNotSupportedException e)
         {
             e.printStackTrace();
         }
-        return clonCancion;
+        return clonListaDeReproduccion;
     }
 
     /* INTERFAZ
        Cabecera:
-           public int compareTo(CancionImpl cancion)
+           public int compareTo(ListaDeReproduccionImpl listaDeReproduccion)
        Descripcion:
-          Compara un objeto con otro
+          Compara una lista de reproduccion segun su nombre
        Precondiciones:
           Ninguna
        Entradas:
-          Un objeto CancionImpl
+          Un objeto clonListaDeReproduccion
        Salidas:
           Un entero
        Postcondiciones:
-          - Devolvera -1 cuando sea menor, 0 cuando sean iguales, 1 cuando sea mayor alfabeticamente
+          - Devolvera -1 cuando sea menor, 0 cuando sean iguales, 1 cuando sea mayor
           - Sera menor cuando el nombre del objeto que lanza el metodo sea inferior al objeto pasado por parametro
           - Sera mayor cuando el nombre del objeto que lanza el metodo sea superior al objeto pasado por parametro
           - Sera igual cuando el nombre del objeto que lanza el metodo sea iguales  al objeto pasado por parametro
     */
     @Override
-    public int compareTo(CancionImpl cancion)
+    public int compareTo(ListaDeReproduccionImpl listaDeReproduccion)
     {
         int compareTo = -1;
 
-        if ( cancion != null )
+        if ( listaDeReproduccion != null )
         {
-            if ( this.getRuta().compareTo(cancion.getRuta()) > 0 )
+            if ( this.getNombre().compareTo(listaDeReproduccion.getNombre()) > 0 )
             {
                 compareTo = 1;
             }
-            else if ( this.getRuta().compareTo(cancion.getRuta()) < 0 )
+            else if ( this.getNombre().compareTo(listaDeReproduccion.getNombre()) < 0 )
             {
                 compareTo = -1;
             }
@@ -188,7 +154,7 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
        Salidas:
            Un booleano
        Postcondiciones:
-           - Los objetos seran iguales cuando tengan el mismo nombre
+           - Los objetos seran iguales cuando tengan el mismo numero de canciones
            - Devolvera VERDADERO si los objetos son iguales y FALSO cuando no lo sean
      */
     @Override
@@ -196,12 +162,12 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     {
         boolean esIgual = false;
 
-        if (object != null && object instanceof CancionImpl)
+        if (object != null && object instanceof ListaDeReproduccionImpl)
         {
-            CancionImpl cancion = (CancionImpl) object;
+            ListaDeReproduccionImpl listaDeReproduccion = (ListaDeReproduccionImpl) object;
 
             //Si tienen el mismo nombre son canciones iguales
-            if (this.getNombre().compareTo(cancion.getNombre()) == 0)
+            if (this.getListaCanciones() == listaDeReproduccion.getListaCanciones())
             {
                 esIgual = true;
             }

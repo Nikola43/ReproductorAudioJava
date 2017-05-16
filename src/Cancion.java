@@ -1,33 +1,26 @@
-package Clases;
-
-import javax.media.Player;
-
 /*
-PROPIEDADES
-    BASICAS
-        Player reproductor | consultable y modificable
+    PROPIEDADES
+        BASICAS
+            String ruta | consultable y modificable
 
-    DERIVADAS
-        int estadoActual
+        DERIVADAS
+            String nombre | consultable
 
-    COMPARTIDAS
-        -
+        COMPARTIDAS
+            -
 */
-public interface Reproductor
+
+public interface Cancion 
 {
 //------------------------------- METODOS CONSULTORES ----------------------------------------//
-    public Player getReproductor();
-    public int getEstadoActual();
+    public String getRuta();
+	public String getNombre();
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
+    public void setRuta(String ruta);
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
 //------------------------------- METODOS AÑADIDOS -------------------------------------------//
-    public void reproducir(CancionImpl cancion);
-    public void pararReproduccion();
-    public void pausarReproduccion();
-    public void reanudarReproduccion();
-    public void rebobinar(int posicion);
 //------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
 }

@@ -1,4 +1,3 @@
-package Clases;
 /*
     PROPIEDADES
         BASICAS

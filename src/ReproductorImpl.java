@@ -1,5 +1,3 @@
-package Clases;
-
 import javax.media.*;
 import javax.media.format.AudioFormat;
 import java.io.IOException;

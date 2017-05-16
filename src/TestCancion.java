@@ -1,18 +1,14 @@
-package Tests;
-
-import Clases.CancionImpl;
-
 public class TestCancion
 {
     public static void main(String[] args)
     {
         //Creamos 3 canciones con los diferentes constructores para probarlos todos
         CancionImpl cancionDefecto = new CancionImpl();
-        CancionImpl cancionSobrecargada = new CancionImpl("Canciones/Maybe.mp3");
+        CancionImpl cancionSobrecargada = new CancionImpl("Maybe.mp3");
         CancionImpl cancionCopia = new CancionImpl(cancionSobrecargada);
 
         //Test metodos modificadores
-        cancionDefecto.setRuta("Canciones/Over.mp3");
+        cancionDefecto.setRuta("Over.mp3");
 
         //Test metodos consultores
         System.out.println("Test metodos consultores");

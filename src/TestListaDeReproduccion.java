@@ -1,8 +1,3 @@
-package Tests;
-
-import Clases.CancionImpl;
-import Clases.ListaDeReproduccionImpl;
-
 import java.util.ArrayList;
 
 public class TestListaDeReproduccion
@@ -13,7 +8,7 @@ public class TestListaDeReproduccion
         ArrayList<CancionImpl> lista2 = new ArrayList<>();
         ArrayList<CancionImpl> lista3 = new ArrayList<>();
 
-        lista1.add(new CancionImpl("Canciones/Overs.mp3"));
+        lista1.add(new CancionImpl("Overs.mp3"));
 
         //Creamos 3 Listas de reproduccion con los diferentes constructores para probarlos todos
         ListaDeReproduccionImpl listaDeReproduccionDefecto = new ListaDeReproduccionImpl();
@@ -23,9 +18,9 @@ public class TestListaDeReproduccion
         //Test metodos modificadores
         listaDeReproduccionDefecto.setNombre("paulo.lis");
         listaDeReproduccionDefecto.setListaCanciones(new ArrayList<>());
-        listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("Canciones/Maybe.mp3"));
-        listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("Canciones/Maybe.mp3"));
-        listaDeReproduccionCopia.getListaCanciones().add(new CancionImpl("Canciones/Maybe.mp3"));
+        listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("Maybe.mp3"));
+        listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("Maybe.mp3"));
+        listaDeReproduccionCopia.getListaCanciones().add(new CancionImpl("Maybe.mp3"));
 
         //Test metodos consultores
         System.out.println("Test metodos consultores");
