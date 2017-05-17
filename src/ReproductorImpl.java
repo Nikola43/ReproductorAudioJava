@@ -1,5 +1,8 @@
+import com.sun.media.controls.GainControlAdapter;
+
 import javax.media.*;
 import javax.media.format.AudioFormat;
+import javax.sound.sampled.FloatControl;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
@@ -203,8 +206,11 @@ public class ReproductorImpl implements Reproductor, Comparable<ReproductorImpl>
 	 * Salidas:		    Reproduce audio por los altavoces
 	 * Postcondiciones: Ninguna
 	*/
-public void reproducir(CancionImpl cancion)
+public void reproducirCancion(CancionImpl cancion)
 {
+
+
+
     //Importamos el decodificador de audio ffmpeg para reproducir audio de diferentes formatos
     String jffmpegAudioDecoder = "net.sourceforge.jffmpeg.AudioDecoder";
     Codec codecAudio = null;
@@ -232,7 +238,11 @@ public void reproducir(CancionImpl cancion)
 
     try
     {
-        reproductor = Manager.createPlayer(new URL(cancion.getRuta()));
+        //reproductor = Manager.createPlayer(new URL(cancion.getRuta()));
+        reproductor = Manager.createRealizedPlayer(new URL(cancion.getRuta()));
+    }
+    catch (CannotRealizeException e) {
+        e.printStackTrace();
     }
     catch (IOException e)
     {
@@ -246,73 +256,185 @@ public void reproducir(CancionImpl cancion)
     //Empezamos a reproducir la cancion
     reproductor.start();
 
-    //Hacemos una pausa cada segundo para ir mostrando los minutos y la barra de progreso
-    try
-    {
-        while ( Math.round(getSegundoActual()) < Math.round(getDuracionTotal()))
-        {
-            Thread.sleep(1000);
-            mostrarReproduccionActual(cancion);
-        }
-
-        //Pausamos reproduccion antes de siguiente cancion
-        pararReproduccion();
-
-    }
-    catch (InterruptedException e)
-    {
-        e.printStackTrace();
-    }
 }
 
-    @Override
-    public void pararReproduccion() {
+    public void manejarReproduccion()
+    {
+        final int TECLA_FLECHA_DERECHA   = 77;
+        final int TECLA_FLECHA_IZQUIERDA = 75;
+        final int TECLA_FLECHA_ARRIBA    = 72;
+        final int TECLA_FLECHA_ABAJO     = 80;
 
+        final int TECLA_P     = 112;
+        final int TECLA_R     = 114;
+
+        int tecla;
+
+        LeerTeclasUsandoCPP leerTeclasUsandoCPP = new LeerTeclasUsandoCPP();
+
+        if ( leerTeclasUsandoCPP.hayTeclaPulsada() )
+        {
+            tecla = leerTeclasUsandoCPP.leerTecla();
+
+            switch (tecla)
+            {
+                case TECLA_FLECHA_DERECHA    : rebobinarAdelante(3);break;
+                case TECLA_FLECHA_IZQUIERDA  : rebobinarAtras(3); break;
+                case TECLA_FLECHA_ARRIBA     : System.out.println("up"); break;
+                case TECLA_FLECHA_ABAJO      : System.out.println("down"); break;
+                case TECLA_P      : pausarReproduccion(); break;
+                case TECLA_R      : reanudarReproduccion(); break;
+            }
+        }
+    }
+
+
+    /*INTERFAZ
+     * Cabecera:        pararReproduccion()
+     * Descripcion:     Para la reproduccion del fichero
+     * Precondiciones:  El fichero debe estar reproduciendose
+     * Entradas:        Ninguna
+     * Salidas:		    Ninguna
+     * Postcondiciones: Ninguna
+    */
+    @Override
+    public void pararReproduccion()
+    {
+        reproductor.stop();
+        reproductor.close();
+    }
+
+
+    /*INTERFAZ
+     * Cabecera:        pausarReproduccion()
+     * Descripcion:     Crear un fichero binario y escribe objetos en el
+     * Precondiciones:  Ninguna
+     * Entradas:        Ninguna
+     * Salidas:		    Ninguna
+     * Postcondiciones: Ninguna
+    */
+    @Override
+    public void pausarReproduccion()
+    {
+        reproductor.stop();
+    }
+
+    /*INTERFAZ
+     * Cabecera:        irPosicion(int posicion)
+     * Descripcion:     Dirige el reproductor a una posicion concreta del audio
+     * Precondiciones:  La posicion indicada debe estar en el rango de tiempo del fichero
+     * Entradas:        La posicion a la que se quiere dirigir
+     * Salidas:		    Ninguna
+     * Postcondiciones: Ninguna
+    */
+    @Override
+    public void rebobinarAtras(int posicion)
+    {
+        double posicionActual = reproductor.getMediaTime().getSeconds();
+        Time posicionDestino = new Time(posicionActual - posicion);
+
+        if ( posicionActual - posicion > 1)
+        {
+            reproductor.setMediaTime(posicionDestino);
+        }
     }
 
     @Override
-    public void pausarReproduccion() {
+    public void rebobinarAdelante(int posicion)
+    {
+        double posicionActual = reproductor.getMediaTime().getSeconds();
+        Time posicionDestino = new Time(posicionActual + posicion);
 
+        if ( posicionActual + posicion < reproductor.getDuration().getSeconds() )
+        {
+            reproductor.setMediaTime(posicionDestino);
+        }
     }
 
+
+        /*INTERFAZ
+ * Cabecera:        continuarReproduccion()
+ * Descripcion:     Reanuda la reproduccion del fichero que se estaba reproduciendo
+ * Precondiciones:  El fichero debe estar abierto, pero en pausa.
+ * Entradas:        Ninguna
+ * Salidas:		    Reproduccion del fichero por los altavoces
+ * Postcondiciones: Ninguna
+*/
+
     @Override
-    public void reanudarReproduccion() {
-
-    }
-
-    @Override
-    public void rebobinar(int posicion) {
-
+    public void reanudarReproduccion()
+    {
+        reproductor.start();
     }
 
     public void mostrarReproduccionActual(CancionImpl cancionActual)
     {
 
-        long segundoActual = Math.round(getSegundoActual());
+        long segundoActual = 0;
         long minutoActual = 0;
 
-        long segundosTotal = Math.round(getDuracionTotal());
-        long minutosTotal = segundosTotal / 60;
+        long segundosTotal = 0;
+        long minutosTotal =  0;
 
-        int contadorPasos = (int) Math.round((Math.round(segundoActual * 100) / Math.round(segundosTotal)));
-
-
-        System.out.println("\nDuracion: "+minutoActual+":"+segundoActual+" / "+minutosTotal+":"+segundosTotal);
-        //System.out.println("Nombre:   "+cancionActual.getNumeroEnLista()+". "+cancionActual.getNombre());
-
-        System.out.println(contadorPasos+" %");
-
+        int contadorPasos = 0;
         char  barraLlena  = '\u2588';
-        char  barraVacia = '\u2591';
 
-        for ( int contadorBarritas = 0; contadorBarritas < contadorPasos; contadorBarritas++)
+
+        while ( Math.round(this.getSegundoActual()) < Math.round(this.getDuracionTotal()))
         {
-            System.out.print(barraLlena);
+
+
+
+
+            segundoActual = Math.round(this.getSegundoActual());
+            segundosTotal = Math.round(this.getDuracionTotal());
+            minutoActual = segundosTotal / 60;
+            contadorPasos = (int) Math.round((Math.round(segundoActual * 100) / Math.round(segundosTotal)));
+
+            System.out.println("\nDuracion: "+minutoActual+":"+segundoActual+" / "+minutosTotal+":"+segundosTotal);
+
+            System.out.println();
+
+
+
+            for ( int contadorBarritas = 0; contadorBarritas < contadorPasos; contadorBarritas++)
+            {
+                System.out.print(barraLlena);
+            }
+
+            try
+            {
+                Thread.sleep(200);
+                refescarBarraProgreso();
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
         }
+
+
 
         //calculamos el tiempo de la animacion por 100%
         //frame = (int) Math.round((act * 100)/total);
         //cuando ambos sean iguales quiere decir que el video a alcanzado el final de la reproduccion
+    }
+
+    public void refescarBarraProgreso()
+    {
+        try
+        {
+
+            final String os = System.getProperty("os.name");
+            if (os.contains("Windows"))
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            else
+                Runtime.getRuntime().exec("clear");
+        }
+        catch (final Exception e)
+        {
+            //  Handle any exceptions.
+        }
     }
 //------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
 

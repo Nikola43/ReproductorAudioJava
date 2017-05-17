@@ -22,10 +22,11 @@ public interface Reproductor
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
 //------------------------------- METODOS AÑADIDOS -------------------------------------------//
-    public void reproducir(CancionImpl cancion);
+    public void reproducirCancion(CancionImpl cancion);
     public void pararReproduccion();
-    public void pausarReproduccion();
+    public void rebobinarAtras(int posicion);
+    public void rebobinarAdelante(int posicion);
     public void reanudarReproduccion();
-    public void rebobinar(int posicion);
+    public void pausarReproduccion();
 //------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
 }

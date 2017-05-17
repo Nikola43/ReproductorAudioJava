@@ -14,7 +14,7 @@ public class TestGestionListaReproduccion
 
         //Test seleccionar cancion
         //gestionListaReproduccion.crearListaReproduccion();
-        gestionListaReproduccion.leerListaReproduccion("pauloSoares.lis");
+        gestionListaReproduccion.leerListaReproduccion("koke.lis");
         //System.out.println("Cancion: "+gestionListaReproduccion.seleccionarCancion());
     }
 }
