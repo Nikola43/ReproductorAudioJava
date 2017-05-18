@@ -118,11 +118,10 @@ public class GestionListaReproduccion
             reproductor.reproducirCancion(cancion);
             reproductor.mostrarReproduccionActual(cancion);
 
-            while ( Math.round(reproductor.getSegundoActual()) < Math.round(reproductor.getDuracionTotal()))
-            {
-                reproductor.mostrarReproduccionActual(cancion);
-                reproductor.manejarReproduccion();
-            }
+
+            reproductor.mostrarReproduccionActual(cancion);
+            //reproductor.manejarReproduccion();
+
         }
         catch (MalformedURLException e)
         {

@@ -258,37 +258,6 @@ public void reproducirCancion(CancionImpl cancion)
 
 }
 
-    public void manejarReproduccion()
-    {
-        final int TECLA_FLECHA_DERECHA   = 77;
-        final int TECLA_FLECHA_IZQUIERDA = 75;
-        final int TECLA_FLECHA_ARRIBA    = 72;
-        final int TECLA_FLECHA_ABAJO     = 80;
-
-        final int TECLA_P     = 112;
-        final int TECLA_R     = 114;
-
-        int tecla;
-
-        LeerTeclasUsandoCPP leerTeclasUsandoCPP = new LeerTeclasUsandoCPP();
-
-        if ( leerTeclasUsandoCPP.hayTeclaPulsada() )
-        {
-            tecla = leerTeclasUsandoCPP.leerTecla();
-
-            switch (tecla)
-            {
-                case TECLA_FLECHA_DERECHA    : rebobinarAdelante(3);break;
-                case TECLA_FLECHA_IZQUIERDA  : rebobinarAtras(3); break;
-                case TECLA_FLECHA_ARRIBA     : System.out.println("up"); break;
-                case TECLA_FLECHA_ABAJO      : System.out.println("down"); break;
-                case TECLA_P      : pausarReproduccion(); break;
-                case TECLA_R      : reanudarReproduccion(); break;
-            }
-        }
-    }
-
-
     /*INTERFAZ
      * Cabecera:        pararReproduccion()
      * Descripcion:     Para la reproduccion del fichero
@@ -401,6 +370,7 @@ public void reproducirCancion(CancionImpl cancion)
             {
                 System.out.print(barraLlena);
             }
+            manejarReproduccion();
 
             try
             {
@@ -418,6 +388,37 @@ public void reproducirCancion(CancionImpl cancion)
         //calculamos el tiempo de la animacion por 100%
         //frame = (int) Math.round((act * 100)/total);
         //cuando ambos sean iguales quiere decir que el video a alcanzado el final de la reproduccion
+    }
+
+
+    public void manejarReproduccion()
+    {
+        final int TECLA_FLECHA_DERECHA   = 77;
+        final int TECLA_FLECHA_IZQUIERDA = 75;
+        final int TECLA_FLECHA_ARRIBA    = 72;
+        final int TECLA_FLECHA_ABAJO     = 80;
+
+        final int TECLA_P     = 112;
+        final int TECLA_R     = 114;
+
+        int tecla;
+
+        LeerTeclasUsandoCPP leerTeclasUsandoCPP = new LeerTeclasUsandoCPP();
+
+        if ( leerTeclasUsandoCPP.hayTeclaPulsada() )
+        {
+            tecla = leerTeclasUsandoCPP.leerTecla();
+
+            switch (tecla)
+            {
+                case TECLA_FLECHA_DERECHA    : rebobinarAdelante(3);break;
+                case TECLA_FLECHA_IZQUIERDA  : rebobinarAtras(3); break;
+                case TECLA_FLECHA_ARRIBA     : System.out.println("up"); break;
+                case TECLA_FLECHA_ABAJO      : System.out.println("down"); break;
+                case TECLA_P      : pausarReproduccion(); break;
+                case TECLA_R      : reanudarReproduccion(); break;
+            }
+        }
     }
 
     public void refescarBarraProgreso()
