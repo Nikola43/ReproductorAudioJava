@@ -109,8 +109,12 @@ public class GestionListaReproduccion
         //Enlazamos el fichero
         ficheroCancion = new File(nombreCancion);
 
+
+
         try
         {
+
+
             //Asignamos la cancion
             cancion = new CancionImpl(ficheroCancion.toURI().toURL().toString());
 
@@ -120,7 +124,6 @@ public class GestionListaReproduccion
 
 
             reproductor.mostrarReproduccionActual(cancion);
-            //reproductor.manejarReproduccion();
 
         }
         catch (MalformedURLException e)
@@ -227,10 +230,12 @@ public class GestionListaReproduccion
         {
             randomAccessFile = new RandomAccessFile(ficheroListaReproduccion, "rw");
             randomAccessFile.writeUTF(String.valueOf(numeroCanciones));
+            System.out.println("FPT "+randomAccessFile.getFilePointer());
 
             for (int i = 0; i < numeroCanciones; i++)
             {
                 randomAccessFile.writeUTF(listaDeCanciones.get(i).getRuta());
+                System.out.println("FP "+randomAccessFile.getFilePointer());
             }
             randomAccessFile.close();
         }
@@ -242,11 +247,6 @@ public class GestionListaReproduccion
         {
             e.printStackTrace();
         }
-
-
-
-
-
     }
 
 
@@ -386,5 +386,56 @@ public class GestionListaReproduccion
             }
         }
         return listaDeCanciones;
+    }
+
+    public void mostrarCancionesListaReproduccion(String nombreListaReproduccion)
+    {
+        //Variables para leer la lista
+        File listaReproduccion = new File(nombreListaReproduccion);
+        RandomAccessFile randomAccessFile = null;
+
+        ArrayList<CancionImpl> listaDeCanciones = new ArrayList<>();
+
+        int numeroCanciones;
+
+        //Si la lista existe la mostramos por pantalla
+        if( listaReproduccion.exists() == true )
+        {
+            try
+            {
+                randomAccessFile = new RandomAccessFile(listaReproduccion, "r");
+                randomAccessFile.seek(0);
+                numeroCanciones = Integer.parseInt(randomAccessFile.readUTF());
+
+                System.out.println(randomAccessFile.getFilePointer());
+
+                System.out.println(randomAccessFile.readUTF());
+
+                System.out.println(randomAccessFile.getFilePointer());
+
+
+                System.out.println(randomAccessFile.readUTF());
+
+
+                System.out.println(randomAccessFile.getFilePointer());
+
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                //Cerramos el fichero
+                try
+                {
+                    randomAccessFile.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

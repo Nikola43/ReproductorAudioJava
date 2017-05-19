@@ -351,10 +351,6 @@ public void reproducirCancion(CancionImpl cancion)
 
         while ( Math.round(this.getSegundoActual()) < Math.round(this.getDuracionTotal()))
         {
-
-
-
-
             segundoActual = Math.round(this.getSegundoActual());
             segundosTotal = Math.round(this.getDuracionTotal());
             minutoActual = segundosTotal / 60;

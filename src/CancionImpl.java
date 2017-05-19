@@ -28,6 +28,7 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
 //------------------------------- PROPIEDADES -----------------------------------------------//
     //BASICAS
     private String ruta;
+    private String autor;
 
     //DERIVADAS
     //String nombre
@@ -40,16 +41,19 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     public CancionImpl()
     {
         ruta = null;
+        autor = null;
     }
     //CONSTRUCTOR SOBRECARGADO
-    public CancionImpl(String ruta)
+    public CancionImpl(String ruta, String autor)
     {
         this.ruta = ruta;
+        this.autor = autor;
     }
     //CONSTRUCTOR DE COPIA
     public CancionImpl(CancionImpl cancion)
     {
         this.ruta = cancion.getRuta();
+        this.autor = cancion.getAutor();
     }
 //------------------------------- FIN CONSTRUCTORES ------------------------------------------//
 
@@ -59,28 +63,35 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     {
         return ruta;
     }
-    /*
-    INTERFAZ
-        Cabecera:
-            public String getNombre()
-        Descripcion:
-            Devuelve el nombre de la cancion sacandolo de la ruta del fichero
-            divide la ruta por '/' en un array de cadenas y coge el ultimo elemento
 
-            Ejemplo: /home/paulo/Escritorio/MiMusica/cancion.mp3
-                       0     1       2         3         4
-            Devolvería 'cancion.mp3'
-        Entradas:
-            -
-        Precondiciones:
-            -
-        Salidas:
-            String
-        Postcondiciones:
-            Devolvera el nombre del fichero junto con el formato
-        Entrada/Salida:
-            -
-    */
+    @Override
+    public String getAutor()
+    {
+        return autor;
+    }
+
+    /*
+        INTERFAZ
+            Cabecera:
+                public String getNombre()
+            Descripcion:
+                Devuelve el nombre de la cancion sacandolo de la ruta del fichero
+                divide la ruta por '/' en un array de cadenas y coge el ultimo elemento
+
+                Ejemplo: /home/paulo/Escritorio/MiMusica/cancion.mp3
+                           0     1       2         3         4
+                Devolvería 'cancion.mp3'
+            Entradas:
+                -
+            Precondiciones:
+                -
+            Salidas:
+                String
+            Postcondiciones:
+                Devolvera el nombre del fichero junto con el formato
+            Entrada/Salida:
+                -
+        */
     @Override
     public String getNombre()
     {
@@ -100,6 +111,9 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     {
         this.ruta = ruta;
     }
+
+    @Override
+    public void setAutor(String autor) { this.autor = autor; }
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
 //------------------------------- METODOS SOBRESCRITOS ---------------------------------------//
@@ -107,7 +121,7 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     public String toString()
     {
         String toString;
-        toString = getRuta()+","+getNombre();
+        toString = getAutor()+","+getNombre()+","+getRuta();
         return toString;
     }
 
