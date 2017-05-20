@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.ArrayList;
 
 public class ListaDeReproduccionImpl implements ListaDeReproduccion, Comparable<ListaDeReproduccionImpl>, Serializable
@@ -10,6 +11,7 @@ public class ListaDeReproduccionImpl implements ListaDeReproduccion, Comparable<
 
     //DERIVADAS
     //int numeroCanciones
+    //Time duracionTotal
 
     //COMPARTIDAS
     //NINGUNA
@@ -52,6 +54,37 @@ public class ListaDeReproduccionImpl implements ListaDeReproduccion, Comparable<
     public int getNumeroCanciones()
     {
         return getListaCanciones().size();
+    }
+
+    public String getDuracionTotal()
+    {
+        //Variables para almacenar las unidades de tiempo
+        long duracionTotalMilisegundos = 0;
+        long horas;
+        long minutos;
+        long segundos;
+
+        //Variable auxiliar para devolver la duracion total de la lista como String
+        String duracionTotalListaToString;
+
+        //Variable para realizar la conversion
+        Duration duracionTotalLista;
+
+        //Recorremos la lista completa y vamos sumando la duracion de cada cancion
+        for (int i = 0; i < getNumeroCanciones(); i++ )
+        {
+            duracionTotalMilisegundos += Double.valueOf(getListaCanciones().get(i).extraerMetadatos()[6]);
+        }
+
+        //Convertimos los milisegundos en horas, minutos y segundos
+        duracionTotalLista = Duration.ofMillis(duracionTotalMilisegundos);
+        horas = duracionTotalLista.toHours();
+        minutos = (int) ((duracionTotalLista.getSeconds() % (60 * 60)) / 60);
+        segundos = (int) (duracionTotalLista.getSeconds() % 60);
+
+        //Devolvemos la duracion total de la lista como cadena con el formato horas:minutos:segundos
+        duracionTotalListaToString = horas+":"+minutos+":"+segundos;
+        return (duracionTotalListaToString);
     }
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 

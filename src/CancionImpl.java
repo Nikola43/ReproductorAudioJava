@@ -1,3 +1,14 @@
+import java.io.*;
+import java.time.Duration;
+
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.sax.BodyContentHandler;
+import org.xml.sax.SAXException;
+
 /*
     PROPIEDADES
         BASICAS
@@ -21,14 +32,11 @@
             public int compareTo(CancionImpl cancion)
 */
 
-import java.io.Serializable;
-
 public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializable 
 {
 //------------------------------- PROPIEDADES -----------------------------------------------//
     //BASICAS
     private String ruta;
-    private String autor;
 
     //DERIVADAS
     //String nombre
@@ -41,19 +49,16 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     public CancionImpl()
     {
         ruta = null;
-        autor = null;
     }
     //CONSTRUCTOR SOBRECARGADO
-    public CancionImpl(String ruta, String autor)
+    public CancionImpl(String ruta)
     {
         this.ruta = ruta;
-        this.autor = autor;
     }
     //CONSTRUCTOR DE COPIA
     public CancionImpl(CancionImpl cancion)
     {
         this.ruta = cancion.getRuta();
-        this.autor = cancion.getAutor();
     }
 //------------------------------- FIN CONSTRUCTORES ------------------------------------------//
 
@@ -64,16 +69,10 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
         return ruta;
     }
 
-    @Override
-    public String getAutor()
-    {
-        return autor;
-    }
-
     /*
         INTERFAZ
             Cabecera:
-                public String getNombre()
+                public String getNombreFichero()
             Descripcion:
                 Devuelve el nombre de la cancion sacandolo de la ruta del fichero
                 divide la ruta por '/' en un array de cadenas y coge el ultimo elemento
@@ -93,7 +92,7 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
                 -
         */
     @Override
-    public String getNombre()
+    public String getNombreFichero()
     {
         String [] rutaDescompuesta;
 
@@ -111,9 +110,6 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     {
         this.ruta = ruta;
     }
-
-    @Override
-    public void setAutor(String autor) { this.autor = autor; }
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
 //------------------------------- METODOS SOBRESCRITOS ---------------------------------------//
@@ -121,7 +117,7 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     public String toString()
     {
         String toString;
-        toString = getAutor()+","+getNombre()+","+getRuta();
+        toString = getNombreFichero()+","+getRuta();
         return toString;
     }
 
@@ -129,7 +125,7 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
     public int hashCode()
     {
         int hashCode;
-        hashCode = getNombre().charAt(1) + getNombre().charAt(2) + getNombre().charAt(3) / getNombre().charAt(4) * getNombre().charAt(5);
+        hashCode = getNombreFichero().charAt(1) + getNombreFichero().charAt(2) + getNombreFichero().charAt(3) / getNombreFichero().charAt(4) * getNombreFichero().charAt(5);
         return hashCode;
     }
 
@@ -214,7 +210,7 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
             CancionImpl cancion = (CancionImpl) object;
 
             //Si tienen el mismo nombre son canciones iguales
-            if (this.getNombre().compareTo(cancion.getNombre()) == 0)
+            if (this.getNombreFichero().compareTo(cancion.getNombreFichero()) == 0)
             {
                 esIgual = true;
             }
@@ -224,6 +220,60 @@ public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializab
 //------------------------------- FIN METODOS SOBRESCRITOS -----------------------------------//
 
 //------------------------------- METODOS AÑADIDOS -------------------------------------------//
+    @Override
+    public String[] extraerMetadatos()
+    {
+        //Fichero de audio
+        File file = new File(this.getNombreFichero());
+
+        //Variables auxiliares para extraer y parsear los metadatos del fichero
+        Parser parser = new AutoDetectParser();
+        BodyContentHandler handler = new BodyContentHandler();
+        Metadata metadata = new Metadata();
+        FileInputStream inputstream = null;
+        ParseContext context = new ParseContext();
+
+        //Array de cadenas con los diferentes datos
+        String metadatosCancion[] = new String[7];
+
+        //Abrimos el fichero
+        try
+        {
+            inputstream = new FileInputStream(file);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+        //Parseamos los datos
+        try
+        {
+            parser.parse(inputstream, handler, metadata, context);
+        }
+        catch (SAXException e)
+        {
+            e.printStackTrace();
+        } catch (TikaException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        //Guardamos los datos de la cancion
+        metadatosCancion[0] = metadata.get("dc:title")          == null ? "Desconocido": metadata.get("dc:title");
+        metadatosCancion[1] = metadata.get("xmpDM:artist")      == null ? "Desconocido": metadata.get("xmpDM:artist");
+        metadatosCancion[2] = metadata.get("xmpDM:trackNumber") == null ? "Desconocido": metadata.get("xmpDM:trackNumber");
+        metadatosCancion[3] = metadata.get("xmpDM:album")       == null ? "Desconocido": metadata.get("xmpDM:album");
+        metadatosCancion[4] = metadata.get("xmpDM:releaseDate") == null ? "Desconocido": metadata.get("xmpDM:releaseDate");
+        metadatosCancion[5] = metadata.get("xmpDM:genre")       == null ? "Desconocido": metadata.get("xmpDM:genre");
+        metadatosCancion[6] = metadata.get("xmpDM:duration")    == null ? "Desconocido": metadata.get("xmpDM:duration");
+        //metadatosCancion[6] = horas+":"+minutos+":"+segundos;
+
+        return metadatosCancion;
+    }
 //------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
 
 }

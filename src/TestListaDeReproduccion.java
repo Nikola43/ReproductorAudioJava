@@ -35,5 +35,7 @@ public class TestListaDeReproduccion
         System.out.println("\thashCode():  "+listaDeReproduccionDefecto.hashCode());
         System.out.println("\tcompareTo(): "+listaDeReproduccionDefecto.compareTo(listaDeReproduccionSobrecargada));
         System.out.println("\tequals():    "+listaDeReproduccionDefecto.equals(listaDeReproduccionSobrecargada));
+
+        System.out.println(listaDeReproduccionDefecto.getDuracionTotal());
     }
 }

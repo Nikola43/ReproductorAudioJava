@@ -6,6 +6,8 @@ import javax.sound.sampled.FloatControl;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
+import java.time.*;
+import java.time.Duration;
 
 public class ReproductorImpl implements Reproductor, Comparable<ReproductorImpl>, Serializable
 {
@@ -188,15 +190,6 @@ public class ReproductorImpl implements Reproductor, Comparable<ReproductorImpl>
 //------------------------------- FIN METODOS SOBRESCRITOS -----------------------------------//
 
 //------------------------------- METODOS AÑADIDOS -------------------------------------------//
-    public double getSegundoActual()
-    {
-        return reproductor.getMediaTime().getSeconds();
-    }
-
-    public double getDuracionTotal()
-    {
-        return reproductor.getDuration().getSeconds();
-    }
 
 	/* INTERFAZ
 	 * Cabecera:        reproducir(CancionImpl cancion)
@@ -208,9 +201,6 @@ public class ReproductorImpl implements Reproductor, Comparable<ReproductorImpl>
 	*/
 public void reproducirCancion(CancionImpl cancion)
 {
-
-
-
     //Importamos el decodificador de audio ffmpeg para reproducir audio de diferentes formatos
     String jffmpegAudioDecoder = "net.sourceforge.jffmpeg.AudioDecoder";
     Codec codecAudio = null;
@@ -239,10 +229,7 @@ public void reproducirCancion(CancionImpl cancion)
     try
     {
         //reproductor = Manager.createPlayer(new URL(cancion.getRuta()));
-        reproductor = Manager.createRealizedPlayer(new URL(cancion.getRuta()));
-    }
-    catch (CannotRealizeException e) {
-        e.printStackTrace();
+        reproductor = Manager.createPlayer(new URL(cancion.getRuta()));
     }
     catch (IOException e)
     {
@@ -339,44 +326,65 @@ public void reproducirCancion(CancionImpl cancion)
     public void mostrarReproduccionActual(CancionImpl cancionActual)
     {
 
-        long segundoActual = 0;
-        long minutoActual = 0;
+        long horasActual;
+        long minutosActual;
+        long segundosActual;
 
-        long segundosTotal = 0;
-        long minutosTotal =  0;
+        long horasTotal;
+        long minutosTotal;
+        long segundosTotal;
 
         int contadorPasos = 0;
         char  barraLlena  = '\u2588';
 
+        Duration duracionCancionActual;
+        Duration duracionCancionTotal;
 
-        while ( Math.round(this.getSegundoActual()) < Math.round(this.getDuracionTotal()))
+
+        duracionCancionTotal = Duration.ofSeconds((long) reproductor.getDuration().getSeconds());
+        horasTotal = duracionCancionTotal.toHours();
+        minutosTotal = (int) ((duracionCancionTotal.getSeconds() % (60 * 60)) / 60);
+        segundosTotal = (int) (duracionCancionTotal.getSeconds() % 60);
+
+
+        while ( Math.round(reproductor.getMediaTime().getSeconds()) < Math.round(reproductor.getDuration().getSeconds()))
         {
-            segundoActual = Math.round(this.getSegundoActual());
-            segundosTotal = Math.round(this.getDuracionTotal());
-            minutoActual = segundosTotal / 60;
-            contadorPasos = (int) Math.round((Math.round(segundoActual * 100) / Math.round(segundosTotal)));
-
-            System.out.println("\nDuracion: "+minutoActual+":"+segundoActual+" / "+minutosTotal+":"+segundosTotal);
-
-            System.out.println();
+            duracionCancionActual = Duration.ofSeconds((long) reproductor.getMediaTime().getSeconds());
+            horasActual = duracionCancionActual.toHours();
+            minutosActual = (int) ((duracionCancionActual.getSeconds() % (60 * 60)) / 60);
+            segundosActual = (int) (duracionCancionActual.getSeconds() % 60);
 
 
+
+
+            contadorPasos = Math.round((Math.round(reproductor.getMediaTime().getSeconds() * 100) / Math.round(reproductor.getDuration().getSeconds())));
+
+            System.out.println("Titulo :  "+cancionActual.extraerMetadatos()[0]);
+            System.out.println("Artista:  "+cancionActual.extraerMetadatos()[1]);
+            System.out.println("Numero:   "+cancionActual.extraerMetadatos()[2]);
+            System.out.println("Album:    "+cancionActual.extraerMetadatos()[3]);
+            System.out.println("Año:      "+cancionActual.extraerMetadatos()[4]);
+            System.out.println("Genero:   "+cancionActual.extraerMetadatos()[5]);
+            System.out.println("Duracion: "+cancionActual.extraerMetadatos()[6]);
+
+            System.out.println("\nProgreso: "+horasActual+":"+minutosActual+":"+segundosActual+" / "+horasTotal+":"+minutosTotal+":"+segundosTotal);
 
             for ( int contadorBarritas = 0; contadorBarritas < contadorPasos; contadorBarritas++)
             {
                 System.out.print(barraLlena);
             }
-            manejarReproduccion();
 
             try
             {
-                Thread.sleep(200);
+                Thread.sleep(500);
                 refescarBarraProgreso();
             }
             catch (InterruptedException e)
             {
                 e.printStackTrace();
             }
+
+            manejarReproduccion();
         }
 
 

@@ -8,12 +8,12 @@ public class TestCancion
         CancionImpl cancionCopia = new CancionImpl(cancionSobrecargada);
 
         //Test metodos modificadores
-        cancionDefecto.setRuta("Over.mp3");
+        cancionDefecto.setRuta("dance.mp3");
 
         //Test metodos consultores
         System.out.println("Test metodos consultores");
         System.out.println("\tgetRuta(): "+cancionCopia.getRuta());
-        System.out.println("\tgetNombre(): "+cancionCopia.getNombre());
+        System.out.println("\tgetNombre(): "+cancionCopia.getNombreFichero());
 
         //Test metodos sobrescritos
         System.out.println("Test metodos sobrescritos");
@@ -21,5 +21,6 @@ public class TestCancion
         System.out.println("\thashCode():  "+cancionDefecto.hashCode());
         System.out.println("\tcompareTo(): "+cancionDefecto.compareTo(cancionSobrecargada));
         System.out.println("\tequals():    "+cancionDefecto.equals(cancionCopia));
+
     }
 }
