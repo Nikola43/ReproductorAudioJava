@@ -106,13 +106,15 @@ public class Main
                 switch (opcionMenu)
                 {
                     //Mostrar listas de reproduccion existentes
-                    case '1' : gestionListaReproduccion.mostrarListasDeReproduccionDisponibles("."); break;
+                    case '1' : //gestionListaReproduccion.mostrarListasDeReproduccionDisponibles("."); break;
 
                     //Crear lista de reproducción
                     case '2' : gestionListaReproduccion.crearListaReproduccion(); break;
 
                     //Insertar cancion en lista de reproducción
-                    case '3' : gestionListaReproduccion.crearListaReproduccion(); break;
+                    case '3' :
+
+                        break;
 
                     //Reproducir canción única
                     case '6' : gestionListaReproduccion.reproducirCancionUnica(); break;
@@ -133,10 +135,11 @@ public class Main
         System.out.println("\t -:||Reproductor de Audio 3000 ||:- \n");
         System.out.println("1. Mostrar listas de reproduccion existentes");
         System.out.println("2. Crear lista de reproducción");
-        System.out.println("3. Insertar cancion en lista de reproducción");
-        System.out.println("4. Eliminar cancion de lista de reproducción");
-        System.out.println("5. Reproducir lista de reproducción");
-        System.out.println("6. Reproducir canción única");
-        System.out.println("7. Salir");
+        System.out.println("3. Borrar lista de reproducción");
+        System.out.println("4. Insertar cancion en lista de reproducción");
+        System.out.println("5. Eliminar cancion de lista de reproducción");
+        System.out.println("6. Reproducir lista de reproducción");
+        System.out.println("7. Reproducir canción única");
+        System.out.println("8. Salir");
     }
 }

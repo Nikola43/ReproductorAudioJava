@@ -13,7 +13,7 @@ public class ReproductorImpl implements Reproductor, Comparable<ReproductorImpl>
 {
 //------------------------------- PROPIEDADES -----------------------------------------------//
     //BASICAS
-    Player reproductor;
+    private Player reproductor;
 
     //DERIVADAS
     //int estadoActual
@@ -326,6 +326,8 @@ public void reproducirCancion(CancionImpl cancion)
     public void mostrarReproduccionActual(CancionImpl cancionActual)
     {
 
+        long duracionTotalMilisegundos = 0;
+
         long horasActual;
         long minutosActual;
         long segundosActual;
@@ -341,17 +343,20 @@ public void reproducirCancion(CancionImpl cancion)
         Duration duracionCancionTotal;
 
 
-        duracionCancionTotal = Duration.ofSeconds((long) reproductor.getDuration().getSeconds());
+
+
+
+        duracionTotalMilisegundos += Double.valueOf(cancionActual.extraerMetadatos()[6]);
+
+
+
+        duracionCancionTotal = Duration.ofMillis(duracionTotalMilisegundos);
         horasTotal = duracionCancionTotal.toHours();
         minutosTotal = (int) ((duracionCancionTotal.getSeconds() % (60 * 60)) / 60);
         segundosTotal = (int) (duracionCancionTotal.getSeconds() % 60);
 
 
-
-
-        while ( Math.round(reproductor.getMediaTime().getSeconds()) < Math.round(reproductor.getDuration().getSeconds()))
-        {
-            duracionCancionActual = Duration.ofSeconds((long) reproductor.getMediaTime().getSeconds());
+        duracionCancionActual = Duration.ofSeconds((long) reproductor.getMediaTime().getSeconds());
             horasActual = duracionCancionActual.toHours();
             minutosActual = (int) ((duracionCancionActual.getSeconds() % (60 * 60)) / 60);
             segundosActual = (int) (duracionCancionActual.getSeconds() % 60);
@@ -365,7 +370,7 @@ public void reproducirCancion(CancionImpl cancion)
             System.out.println("Album:    "+cancionActual.extraerMetadatos()[3]);
             System.out.println("Año:      "+cancionActual.extraerMetadatos()[4]);
             System.out.println("Genero:   "+cancionActual.extraerMetadatos()[5]);
-            System.out.println("Duracion: "+cancionActual.extraerMetadatos()[6]);
+            System.out.println("Duracion: "+horasTotal+":"+minutosTotal+":"+segundosTotal);
 
             System.out.println("\nProgreso: "+horasActual+":"+minutosActual+":"+segundosActual+" / "+horasTotal+":"+minutosTotal+":"+segundosTotal);
 
@@ -377,7 +382,7 @@ public void reproducirCancion(CancionImpl cancion)
 
             try
             {
-                Thread.sleep(1000);
+                Thread.sleep(500);
                 refescarBarraProgreso();
             }
             catch (InterruptedException e)
@@ -386,7 +391,7 @@ public void reproducirCancion(CancionImpl cancion)
             }
 
             manejarReproduccion();
-        }
+
 
 
 
@@ -416,8 +421,8 @@ public void reproducirCancion(CancionImpl cancion)
 
             switch (tecla)
             {
-                case TECLA_FLECHA_DERECHA    : rebobinarAdelante(3);break;
-                case TECLA_FLECHA_IZQUIERDA  : rebobinarAtras(3); break;
+                case TECLA_FLECHA_DERECHA    : rebobinarAdelante(10);break;
+                case TECLA_FLECHA_IZQUIERDA  : rebobinarAtras(10); break;
                 case TECLA_FLECHA_ARRIBA     : System.out.println("up"); break;
                 case TECLA_FLECHA_ABAJO      : System.out.println("down"); break;
                 case TECLA_P      : pausarReproduccion(); break;

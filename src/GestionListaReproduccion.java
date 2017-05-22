@@ -62,19 +62,20 @@ public class GestionListaReproduccion
         return soyListaReproduccion;
     }
 
-    public void mostrarCancionesDisponibles(String directorio)
+    public ArrayList<String> devolverListadoFicherosCancion(String directorio)
     {
+        ArrayList<String> nombresDeCanciones = new ArrayList<>();
+
         File[] ficheros;
-        int contadorCanciones = 0;
 
         //Creamos el fichero
-        File miFichero = new File(directorio);
+        File miDirectorio = new File(directorio);
 
         //Comprobamos si el fichero existe
-        if (miFichero.exists())
+        if (miDirectorio.exists())
         {
             //Creamos array con los ficheros del directorio
-            ficheros = miFichero.listFiles();
+            ficheros = miDirectorio.listFiles();
 
             //Recorremos todos los ficheros del directorio
             for (int i = 0; i < ficheros.length; i++)
@@ -85,12 +86,12 @@ public class GestionListaReproduccion
                     //Si la extension es una extension de un fichero de audio
                     if ( esCancion(ficheros[i].getName()) )
                     {
-                        contadorCanciones++;
-                        System.out.println("\t" +contadorCanciones+ ". " + ficheros[i].getName());
+                        nombresDeCanciones.add(ficheros[i].getName());
                     }
                 }
             }
         }
+        return nombresDeCanciones;
     }
 
     public void reproducirCancionUnica()
@@ -100,8 +101,14 @@ public class GestionListaReproduccion
         CancionImpl cancion = null;
         String nombreCancion;
 
+        ArrayList<String> listaCanciones = devolverListadoFicherosCancion(".");
+
         //Mostramos las canciones disponibles
-        mostrarCancionesDisponibles(".");
+        for ( int i = 0; i < listaCanciones.size(); i++)
+        {
+            System.out.println((i+1)+". "+listaCanciones.get(i));
+        }
+
 
         //Pedimos al usuario que seleccione una cancion
         nombreCancion = seleccionarCancion();
@@ -129,19 +136,20 @@ public class GestionListaReproduccion
         }
     }
 
-    public void mostrarListasDeReproduccionDisponibles(String directorio)
+    public ArrayList<String> devolverListadoFicherosLista(String directorio)
     {
+        ArrayList<String> nombresListas = new ArrayList<>();
+
         File[] ficheros;
-        int contadorListas = 0;
 
         //Creamos el fichero
-        File miFichero = new File(directorio);
+        File miDirectorio = new File(directorio);
 
         //Comprobamos si el fichero existe
-        if (miFichero.exists())
+        if (miDirectorio.exists())
         {
             //Creamos array con los ficheros del directorio
-            ficheros = miFichero.listFiles();
+            ficheros = miDirectorio.listFiles();
 
             //Recorremos todos los ficheros del directorio
             for (int i = 0; i < ficheros.length; i++)
@@ -152,12 +160,12 @@ public class GestionListaReproduccion
                     //Si la extension es una extension de un fichero de audio
                     if ( esListaReproduccion(ficheros[i].getName()) )
                     {
-                        contadorListas++;
-                        System.out.println("\t" +contadorListas+ ". " + ficheros[i].getName());
+                        nombresListas.add(ficheros[i].getName());
                     }
                 }
             }
         }
+        return nombresListas;
     }
 
     public String seleccionarCancion()
@@ -223,26 +231,23 @@ public class GestionListaReproduccion
             //Abrimos el fichero
             randomAccessFile = new RandomAccessFile(ficheroListaReproduccion, "rw");
 
-            //Escribimos el nombre de la lista
-            randomAccessFile.seek(posicionPuntero);
-            randomAccessFile.writeUTF(listaDeReproduccion.getNombre());
-            System.out.println("NOMBRE "+randomAccessFile.getFilePointer());
-
             //Escribimos el numero de canciones que tiene la lista
-            posicionPuntero = 50;
             randomAccessFile.seek(posicionPuntero);
             randomAccessFile.writeUTF(String.valueOf(listaDeReproduccion.getNumeroCanciones()));
-            System.out.println("Numernp "+randomAccessFile.getFilePointer());
 
-            posicionPuntero = 100;
+            //Escribimos el nombre de la lista
+            posicionPuntero = 50;
             randomAccessFile.seek(posicionPuntero);
+            randomAccessFile.writeUTF(listaDeReproduccion.getNombre());
+
+            posicionPuntero = 0;
 
             for (int i = 0; i < listaDeReproduccion.getNumeroCanciones(); i++)
             {
-                randomAccessFile.writeUTF(listaDeReproduccion.getListaCanciones().get(i).getRuta());
                 posicionPuntero += 100;
+                System.out.println(posicionPuntero);
                 randomAccessFile.seek(posicionPuntero);
-                System.out.println("FP "+randomAccessFile.getFilePointer());
+                randomAccessFile.writeUTF(listaDeReproduccion.getListaCanciones().get(i).getRuta());
             }
             randomAccessFile.close();
         }
@@ -256,41 +261,46 @@ public class GestionListaReproduccion
         }
     }
 
-    public void insertarCancionListaReproduccion(CancionImpl cancion, String rutaListaDeReproduccion)
+    public void insertarCancionListaReproduccion(String rutaCancion, String rutaListaDeReproduccion)
     {
         //Variables para leer la lista
         File listaReproduccion = new File(rutaListaDeReproduccion);
         RandomAccessFile randomAccessFile = null;
 
-        ListaDeReproduccionImpl listaDeReproduccion = null;
-        ArrayList<CancionImpl> listaDeCanciones = new ArrayList<>();
+        File archivoCancion = new File(rutaCancion);
 
         int numeroCanciones;
 
         int posicionPuntero = 0;
 
-        //Si la lista existe la mostramos por pantalla
-        if( listaReproduccion.exists() == true )
+
+        //Si la lista y la cancion existen
+        if( listaReproduccion.exists() == true && archivoCancion.exists() )
         {
             try
             {
+                //Abrimos la lista
                 randomAccessFile = new RandomAccessFile(listaReproduccion, "rw");
 
                 //Leemos el tamaño de la lista
-                posicionPuntero = 50;
                 randomAccessFile.seek(posicionPuntero);
                 numeroCanciones = Integer.parseInt(randomAccessFile.readUTF());
+                System.out.println(numeroCanciones);
 
-                randomAccessFile.seek(100 * numeroCanciones);
+                //Vamos a la ultima posicion
+                randomAccessFile.seek(100 * (numeroCanciones + 1));
 
-                for ( int i = 0; i < numeroCanciones; i++)
-                {
-                    listaDeCanciones.add(new CancionImpl(randomAccessFile.readUTF()));
-                    posicionPuntero += 100;
-                    randomAccessFile.seek(posicionPuntero);
-                }
+                //Escribimos una nueva cancion
+                randomAccessFile.writeUTF(archivoCancion.toURI().toURL().toString());
+                numeroCanciones++;
 
-                //listaDeReproduccion = new ListaDeReproduccionImpl(nombreListaReproduccion, listaDeCanciones);
+                System.out.println(archivoCancion.toURI().toURL().toString());
+                System.out.println(numeroCanciones);
+
+                //
+                randomAccessFile.seek(0);
+                randomAccessFile.writeUTF(String.valueOf(numeroCanciones));
+
             }
             catch (IOException e)
             {
@@ -329,7 +339,7 @@ public class GestionListaReproduccion
        Entradas/Salidas:
            -
      */
-    public void crearListaReproduccion()
+    public ListaDeReproduccionImpl crearListaReproduccion()
     {
         ListaDeReproduccionImpl listaDeReproduccion = new ListaDeReproduccionImpl();
         ArrayList<CancionImpl> listaDeCanciones = new ArrayList<>();
@@ -342,6 +352,9 @@ public class GestionListaReproduccion
 
         char respuestaUsuario;
         Scanner scanner = new Scanner(System.in);
+
+        ArrayList<String> listaCanciones = devolverListadoFicherosCancion(".");
+
 
         //Pedimos que introduzca el nombre de la lista
         do
@@ -356,13 +369,23 @@ public class GestionListaReproduccion
             {
                 System.out.println("Ya existe una lista de reproduccion '"+listaDeReproduccion.getNombre()+"', utilice otro nombre");
             }
-        } while( ficheroListaReproduccion.exists() == true);
+            if ( listaDeReproduccion.getNombre().length() > 50 )
+            {
+                System.out.println("El nombre de la lista de reproduccion debe ser como maximo 50 caracteres, utilice otro nombre");
+            }
+        } while( ficheroListaReproduccion.exists() == true || listaDeReproduccion.getNombre().length() > 50);
 
         do
         {
             //Pedimos al usuario que introduzca el nombre de la cancion que quiere añadir a su lista
             System.out.println("Estas son las canciones disponibles: ");
-            mostrarCancionesDisponibles(".");
+
+            //Mostramos las canciones disponibles
+            for ( int i = 0; i < listaCanciones.size(); i++)
+            {
+                System.out.println((i+1)+". "+listaCanciones.get(i));
+            }
+
 
             rutaCancionAuxiliar = seleccionarCancion();
 
@@ -395,14 +418,9 @@ public class GestionListaReproduccion
         //Guardamos la lista de canciones en la lista de reproduccion
         listaDeReproduccion.setListaCanciones(listaDeCanciones);
 
-        //Guardamos lista de reproduccion en el disco duro del sistema
         guardarListaReproduccion(listaDeReproduccion);
 
-        //Si la lista existe, se muestra un mensaje que confirma que se a creado correctamente
-        if ( ficheroListaReproduccion.exists() == true)
-        {
-            System.out.println("\nSe ha creado la lista de reproduccion correctamente");
-        }
+        return listaDeReproduccion;
     }
 
     public ListaDeReproduccionImpl leerListaReproduccion(String rutaListaDeReproduccion)
@@ -429,21 +447,24 @@ public class GestionListaReproduccion
 
                 //Leemos el nombre de la lista de reproduccion
                 randomAccessFile.seek(posicionPuntero);
-                nombreListaReproduccion = randomAccessFile.readUTF();
+                numeroCanciones = Integer.parseInt(randomAccessFile.readUTF());
+
+                System.out.println(numeroCanciones);
 
                 //Leemos el tamaño de la lista
                 posicionPuntero = 50;
                 randomAccessFile.seek(posicionPuntero);
-                numeroCanciones = Integer.parseInt(randomAccessFile.readUTF());
+                nombreListaReproduccion = randomAccessFile.readUTF();
 
-                posicionPuntero = 100;
-                randomAccessFile.seek(posicionPuntero);
+                posicionPuntero = 0;
+                randomAccessFile.seek(0);
 
                 for ( int i = 0; i < numeroCanciones; i++)
                 {
-                    listaDeCanciones.add(new CancionImpl(randomAccessFile.readUTF()));
                     posicionPuntero += 100;
                     randomAccessFile.seek(posicionPuntero);
+                    listaDeCanciones.add(new CancionImpl(randomAccessFile.readUTF()));
+
                 }
 
                 listaDeReproduccion = new ListaDeReproduccionImpl(nombreListaReproduccion, listaDeCanciones);
@@ -470,13 +491,135 @@ public class GestionListaReproduccion
 
     public void mostrarCancionesListaReproduccion(String rutaListaDeReproduccion)
     {
-       ListaDeReproduccionImpl listaDeReproduccion = leerListaReproduccion(rutaListaDeReproduccion);
+       File ficheroListaDeReproduccion = new File(rutaListaDeReproduccion);
 
-       System.out.println("Nombre: "+listaDeReproduccion.getNombre() + "\t |" +"  Numero de canciones: "+listaDeReproduccion.getNumeroCanciones() );
-
-       for (int i = 0; i < listaDeReproduccion.getNumeroCanciones(); i++)
+       if ( ficheroListaDeReproduccion.exists() )
        {
-           System.out.println("\t"+(i+1)+". "+listaDeReproduccion.getListaCanciones().get(i).getNombreFichero());
+           ListaDeReproduccionImpl listaDeReproduccion = leerListaReproduccion(rutaListaDeReproduccion);
+
+           if ( listaDeReproduccion.getNumeroCanciones() > 0 )
+           {
+               System.out.println("Nombre: "+listaDeReproduccion.getNombre() + "\t |" +"  Numero de canciones: "+listaDeReproduccion.getNumeroCanciones() );
+
+               for (int i = 0; i < listaDeReproduccion.getNumeroCanciones(); i++)
+               {
+                   System.out.println("\t"+(i+1)+". "+listaDeReproduccion.getListaCanciones().get(i).getNombreFichero());
+               }
+           }
        }
+    }
+
+    public boolean borrarListaDeReproduccion(String rutaListaDeReproduccion)
+    {
+        boolean resultadoBorrado = false;
+
+        File ficheroListaDeReproduccion = new File(rutaListaDeReproduccion);
+
+        if ( ficheroListaDeReproduccion.exists() && ficheroListaDeReproduccion.delete())
+        {
+            resultadoBorrado = true;
+        }
+        return resultadoBorrado;
+    }
+
+
+    public void reproducirListaReproduccion(String rutaListaDeReproduccion)
+    {
+        //Variables para leer la lista
+        File listaReproduccion = new File(rutaListaDeReproduccion);
+        RandomAccessFile randomAccessFile = null;
+
+        ListaDeReproduccionImpl listaDeReproduccion = null;
+        CancionImpl cancionActual = new CancionImpl();
+
+        ReproductorImpl reproductor = new ReproductorImpl();
+
+        int numeroCanciones;
+        String nombreListaReproduccion;
+
+        listaDeReproduccion = leerListaReproduccion(rutaListaDeReproduccion);
+
+
+
+
+        int posicionPuntero = 0;
+
+        //Si la lista existe la mostramos por pantalla
+        if( listaReproduccion.exists() == true )
+        {
+            try
+            {
+                randomAccessFile = new RandomAccessFile(listaReproduccion, "r");
+
+                //Leemos el nombre de la lista de reproduccion
+                randomAccessFile.seek(posicionPuntero);
+                numeroCanciones = Integer.parseInt(randomAccessFile.readUTF());
+
+                System.out.println(numeroCanciones);
+
+                //Leemos el tamaño de la lista
+                posicionPuntero = 50;
+                randomAccessFile.seek(posicionPuntero);
+                nombreListaReproduccion = randomAccessFile.readUTF();
+
+                posicionPuntero = 0;
+                randomAccessFile.seek(0);
+
+                for ( int i = 0; i < numeroCanciones; i++)
+                {
+                    posicionPuntero += 100;
+                    randomAccessFile.seek(posicionPuntero);
+                    cancionActual.setRuta(randomAccessFile.readUTF());
+
+                    //Reproducimos la cancion
+                    reproductor.reproducirCancion(cancionActual);
+
+
+
+                    while ( Math.round(reproductor.getReproductor().getMediaTime().getSeconds()) < Math.round(reproductor.getReproductor().getDuration().getSeconds()))
+                    {
+                        reproductor.mostrarReproduccionActual(cancionActual);
+
+                        System.out.println("Lista de reproduccion: "+nombreListaReproduccion+"\n");
+                        for (int j = 0; j < listaDeReproduccion.getNumeroCanciones(); j++)
+                        {
+                            String mensaje = " ";
+                            if (listaDeReproduccion.getListaCanciones().get(j).getNombreFichero().compareTo(cancionActual.getNombreFichero()) == 0)
+                            {
+                                mensaje = " Reproduciendo: "+(j+1)+". "+listaDeReproduccion.getListaCanciones().get(j).getNombreFichero();
+                            }
+                            else
+                            {
+                                mensaje = "\t"+(j+1)+". "+listaDeReproduccion.getListaCanciones().get(j).getNombreFichero();
+                            }
+
+                             System.out.println(mensaje+"\n");
+                        }
+                    }
+
+
+
+
+
+                }
+
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                //Cerramos el fichero
+                try
+                {
+                    randomAccessFile.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

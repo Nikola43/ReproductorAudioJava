@@ -18,7 +18,7 @@ public class TestListaDeReproduccion
         //Test metodos modificadores
         listaDeReproduccionDefecto.setNombre("paulo.lis");
         listaDeReproduccionDefecto.setListaCanciones(new ArrayList<>());
-        listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("Maybe.mp3"));
+        listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("dance.mp3"));
         listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("Maybe.mp3"));
         listaDeReproduccionCopia.getListaCanciones().add(new CancionImpl("Maybe.mp3"));
 
@@ -37,5 +37,6 @@ public class TestListaDeReproduccion
         System.out.println("\tequals():    "+listaDeReproduccionDefecto.equals(listaDeReproduccionSobrecargada));
 
         System.out.println(listaDeReproduccionDefecto.getDuracionTotal());
+
     }
 }

@@ -14,8 +14,11 @@ public class TestGestionListaReproduccion
 
         //Test seleccionar cancion
         //gestionListaReproduccion.crearListaReproduccion();
-        gestionListaReproduccion.leerListaReproduccion("pauloSoares.lis");
-        gestionListaReproduccion.mostrarCancionesListaReproduccion("pauloSoares.lis");
+        //gestionListaReproduccion.leerListaReproduccion("pauloSoares.lis");
+        //gestionListaReproduccion.insertarCancionListaReproduccion("dance.mp3", "pauloSoares.lis");
+        //gestionListaReproduccion.leerListaReproduccion("pauloSoares.lis");
+        //gestionListaReproduccion.mostrarCancionesListaReproduccion("pauloSoares.lis");
+        gestionListaReproduccion.reproducirListaReproduccion("pauloSoares.lis");
         //System.out.println("Cancion: "+gestionListaReproduccion.seleccionarCancion());
     }
 }
