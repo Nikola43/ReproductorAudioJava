@@ -347,6 +347,8 @@ public void reproducirCancion(CancionImpl cancion)
         segundosTotal = (int) (duracionCancionTotal.getSeconds() % 60);
 
 
+
+
         while ( Math.round(reproductor.getMediaTime().getSeconds()) < Math.round(reproductor.getDuration().getSeconds()))
         {
             duracionCancionActual = Duration.ofSeconds((long) reproductor.getMediaTime().getSeconds());
@@ -354,10 +356,8 @@ public void reproducirCancion(CancionImpl cancion)
             minutosActual = (int) ((duracionCancionActual.getSeconds() % (60 * 60)) / 60);
             segundosActual = (int) (duracionCancionActual.getSeconds() % 60);
 
-
-
-
             contadorPasos = Math.round((Math.round(reproductor.getMediaTime().getSeconds() * 100) / Math.round(reproductor.getDuration().getSeconds())));
+
 
             System.out.println("Titulo :  "+cancionActual.extraerMetadatos()[0]);
             System.out.println("Artista:  "+cancionActual.extraerMetadatos()[1]);
@@ -371,12 +371,13 @@ public void reproducirCancion(CancionImpl cancion)
 
             for ( int contadorBarritas = 0; contadorBarritas < contadorPasos; contadorBarritas++)
             {
+
                 System.out.print(barraLlena);
             }
 
             try
             {
-                Thread.sleep(500);
+                Thread.sleep(1000);
                 refescarBarraProgreso();
             }
             catch (InterruptedException e)
