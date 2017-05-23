@@ -76,7 +76,7 @@ public class Main
     public static void main(String[] args)
     {
         //Constante para salir del programa
-        final char SALIR = '8';
+        final char SALIR = '7';
 
         //Variables para la respuestas del usuario
         char respuestaUsuario = 'n';
@@ -106,33 +106,31 @@ public class Main
                 switch (opcionMenu)
                 {
                     //Mostrar listas de reproduccion existentes
-                    case '1' : //gestionListaReproduccion.mostrarListasDeReproduccionDisponibles("."); break;
+                    case '1' : gestionListaReproduccion.mostrarListasReproduccionExistentes("."); break;
 
                     //Crear lista de reproducción
-                    case '2' : gestionListaReproduccion.crearListaReproduccion(); break;
+                    case '2' :
+                        if (gestionListaReproduccion.crearListaReproduccion())
+                        {
+                            System.out.println("Se ha creado la lista correctamente");
+                        }
+                    break;
 
                     //Insertar cancion en lista de reproducción
                     case '3' :
-                        do
+                        if (gestionListaReproduccion.borrarListaReproduccion())
                         {
-                            gestionListaReproduccion.mostrarListasReproduccionExistentes(".");
-
-                            if (gestionListaReproduccion.borrarListaDeReproduccion(gestionListaReproduccion.seleccionarListaReproduccion()))
-                            {
-                                System.out.println("Se ha borrado la lista correctamente");
-                            }
-
-                            do
-                            {
-                                System.out.print("\n¿Desea borrar otra lista de reproduccion(s/n)?: ");
-                                respuestaUsuario  = Character.toLowerCase(scanner.next().charAt(0));
-                            } while ( respuestaUsuario != 's' && respuestaUsuario != 'n' );
-
-                        } while ( respuestaUsuario == 's');
+                            System.out.println("Se ha borrado la lista correctamente");
+                        }
                     break;
 
-                    //Reproducir canción única
-                    case '7' : gestionListaReproduccion.reproducirCancionUnica(); break;
+                    case '4' :
+                        if (gestionListaReproduccion.agregarCancionesListaReproduccion())
+                        {
+                            System.out.println("Se ha agregado la cancion correctamente");
+                        }
+
+                        break;
                 }
 
                 //Preguntamos si quiere volver a ejecutar el programa
@@ -154,7 +152,6 @@ public class Main
         System.out.println("4. Insertar cancion en lista de reproducción");
         System.out.println("5. Eliminar cancion de lista de reproducción");
         System.out.println("6. Reproducir lista de reproducción");
-        System.out.println("7. Reproducir canción única");
-        System.out.println("8. Salir");
+        System.out.println("7. Salir");
     }
 }
