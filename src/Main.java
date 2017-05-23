@@ -76,7 +76,7 @@ public class Main
     public static void main(String[] args)
     {
         //Constante para salir del programa
-        final char SALIR = '7';
+        final char SALIR = '8';
 
         //Variables para la respuestas del usuario
         char respuestaUsuario = 'n';
@@ -113,11 +113,26 @@ public class Main
 
                     //Insertar cancion en lista de reproducción
                     case '3' :
+                        do
+                        {
+                            gestionListaReproduccion.mostrarListasReproduccionExistentes(".");
 
-                        break;
+                            if (gestionListaReproduccion.borrarListaDeReproduccion(gestionListaReproduccion.seleccionarListaReproduccion()))
+                            {
+                                System.out.println("Se ha borrado la lista correctamente");
+                            }
+
+                            do
+                            {
+                                System.out.print("\n¿Desea borrar otra lista de reproduccion(s/n)?: ");
+                                respuestaUsuario  = Character.toLowerCase(scanner.next().charAt(0));
+                            } while ( respuestaUsuario != 's' && respuestaUsuario != 'n' );
+
+                        } while ( respuestaUsuario == 's');
+                    break;
 
                     //Reproducir canción única
-                    case '6' : gestionListaReproduccion.reproducirCancionUnica(); break;
+                    case '7' : gestionListaReproduccion.reproducirCancionUnica(); break;
                 }
 
                 //Preguntamos si quiere volver a ejecutar el programa

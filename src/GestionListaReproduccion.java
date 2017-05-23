@@ -136,6 +136,24 @@ public class GestionListaReproduccion
         }
     }
 
+    public void mostrarListasReproduccionExistentes(String rutaDirectorioListas)
+    {
+        int numeroListas = devolverListadoFicherosLista(rutaDirectorioListas).size();
+
+        if ( numeroListas > 0 )
+        {
+            System.out.println("Listas Disponibles: ");
+            for (int i=0; i < numeroListas; i++)
+            {
+                System.out.println("\t"+(i+1)+". "+ devolverListadoFicherosLista(rutaDirectorioListas).get(i));
+            }
+        }
+        else
+        {
+            System.out.println("No hay ninguna lista de reproduccion");
+        }
+    }
+
     public ArrayList<String> devolverListadoFicherosLista(String directorio)
     {
         ArrayList<String> nombresListas = new ArrayList<>();
@@ -172,34 +190,90 @@ public class GestionListaReproduccion
     {
         Scanner scanner = new Scanner(System.in);
         String cancionSeleccionada;
+        File ficheroCancion = null;
+        String nombreCancion = " ";
 
-        File ficheroCancion;
-        do
+
+        ArrayList<String> canciones = devolverListadoFicherosCancion(".");
+
+        if ( canciones.size() > 0)
         {
-            //Pedimos al usuario que introduzca una cancion de la lista
-            System.out.print("\nIntroduzca el nombre de la cancion que desea seleccionar: ");
-            //
-            cancionSeleccionada = scanner.nextLine();
-
-            ficheroCancion = new File(cancionSeleccionada);
-
-            //Si el fichero no existe
-            if (ficheroCancion.exists() == false)
+            do
             {
-                System.out.print("El fichero "+ficheroCancion.getName()+" no existe");
-            }
-            else
-            {
-                //Si el fichero existe pero no es un fichero de audio
-                if (esCancion(ficheroCancion.getAbsolutePath()) == false)
+                //Pedimos al usuario que introduzca una cancion de la lista
+                System.out.print("\nIntroduzca el nombre de la cancion que desea seleccionar: ");
+                //
+                cancionSeleccionada = scanner.nextLine();
+
+                ficheroCancion = new File(cancionSeleccionada);
+                nombreCancion = ficheroCancion.getName();
+
+                //Si el fichero no existe
+                if (ficheroCancion.exists() == false)
                 {
-                    System.out.print("El fichero "+ficheroCancion.getName()+" no es un fichero de audio");
+                    System.out.print("El fichero "+nombreCancion+" no existe");
                 }
-            }
-        } while (ficheroCancion.exists() == false || esCancion(ficheroCancion.getAbsolutePath()) == false);
+                else
+                {
+                    //Si el fichero existe pero no es un fichero de audio
+                    if (esCancion(ficheroCancion.getAbsolutePath()) == false)
+                    {
+                        System.out.print("El fichero "+nombreCancion+" no es un fichero de audio");
+                    }
+                }
+            } while (ficheroCancion.exists() == false || esCancion(ficheroCancion.getAbsolutePath()) == false);
+        }
+        else
+        {
+            System.out.println("No hay canciones disponibles");
+            nombreCancion = " ";
+        }
 
-        return ficheroCancion.getName();
+        return nombreCancion;
     }
+
+    public String seleccionarListaReproduccion()
+    {
+        Scanner scanner = new Scanner(System.in);
+        String listaSeleccionada;
+        File ficheroLista = null;
+
+        ArrayList<String> nombresListas = devolverListadoFicherosLista(".");
+
+        if ( nombresListas.size() > 0 )
+        {
+            do
+            {
+                //Pedimos al usuario que introduzca una lista
+                System.out.print("\nIntroduzca el nombre de la cancion que desea seleccionar: ");
+
+                listaSeleccionada = scanner.nextLine();
+
+                ficheroLista = new File(listaSeleccionada);
+
+                //Si el fichero no existe
+                if (ficheroLista.exists() == false)
+                {
+                    System.out.print("El fichero "+ficheroLista.getName()+" no existe");
+                }
+                else
+                {
+                    //Si el fichero existe pero no es un fichero de audio
+                    if (esListaReproduccion(ficheroLista.getAbsolutePath()) == false)
+                    {
+                        System.out.print("El fichero "+ficheroLista.getName()+" no es un fichero lista de reproduccion");
+                    }
+                }
+            } while (ficheroLista.exists() == false || esListaReproduccion(ficheroLista.getAbsolutePath()) == false);
+        }
+        else
+        {
+
+        }
+
+        return ficheroLista.getName();
+    }
+
 
     /* INTERFAZ
        Cabecera:
