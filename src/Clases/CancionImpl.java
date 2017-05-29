@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
             public int compareTo(Clases.CancionImpl cancion)
 */
 
-public class CancionImpl implements Cancion, Comparable<CancionImpl>, Serializable
+public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>, Serializable
 {
 //------------------------------- PROPIEDADES -----------------------------------------------//
     //BASICAS

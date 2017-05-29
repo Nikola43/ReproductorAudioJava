@@ -3,11 +3,11 @@ package Clases;
 public class LeerTeclasUsandoCPP
 {
 
-	//creamos un nuevo metodo nativo en c
+	//creamos un nuevo metodo nativo en c++
     native int leerTecla();
     native boolean hayTeclaPulsada();
 
-    //Cargamos la libreria compilada 'leerTeclasC.dll' que contiene el metodo leerTecla()
+    //Cargamos la libreria compilada 'leerTeclasCPP.dll' que contiene el metodo leerTecla()
     static 
     {
         System.loadLibrary("leerTeclasCPP");
@@ -19,8 +19,7 @@ public class LeerTeclasUsandoCPP
     	//Definicion de constantes con las teclas que usara el programa
     	final int ESC = 27; 
 
-    	//Instanciamos un objeto tipo 'LeerTeclasUsandoC' para acceder a metodo
-    	//leerTeclas() escrito en C e importado de la libreria leerTeclas.c
+    	//Instanciamos un objeto tipo 'LeerTeclasUsandoCPP'
         LeerTeclasUsandoCPP teclas = new LeerTeclasUsandoCPP();
 
         //Creamos una variable para almacenar el codigo de la tecla pulsada

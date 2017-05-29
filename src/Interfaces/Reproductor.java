@@ -18,19 +18,19 @@ PROPIEDADES
 public interface Reproductor
 {
 //------------------------------- METODOS CONSULTORES ----------------------------------------//
-    public Player getReproductor();
-    public int getEstadoActual();
+    Player getReproductor();
+    int getEstadoActual();
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
 //------------------------------- METODOS AÑADIDOS -------------------------------------------//
-    public void reproducirCancion(CancionImpl cancion);
-    public void pararReproduccion();
-    public void rebobinarAtras(int posicion);
-    public void rebobinarAdelante(int posicion);
-    public void reanudarReproduccion();
-    public void pausarReproduccion();
+    void reproducirCancion(CancionImpl cancion);
+    void pararReproduccion();
+    void rebobinarAtras(int posicion);
+    void rebobinarAdelante(int posicion);
+    void reanudarReproduccion();
+    void pausarReproduccion();
 //------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
 }

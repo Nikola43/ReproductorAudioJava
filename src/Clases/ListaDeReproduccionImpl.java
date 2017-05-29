@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 
-public class ListaDeReproduccionImpl implements ListaDeReproduccion, Comparable<ListaDeReproduccionImpl>, Serializable
+public class ListaDeReproduccionImpl implements ListaDeReproduccion, Cloneable, Comparable<ListaDeReproduccionImpl>, Serializable
 {
 //------------------------------- PROPIEDADES -----------------------------------------------//
     //BASICAS

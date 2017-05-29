@@ -15,15 +15,15 @@ import java.io.FileNotFoundException;
 public interface Cancion
 {
 //------------------------------- METODOS CONSULTORES ----------------------------------------//
-    public String getRuta();
-	public String getNombreFichero();
+    String getRuta();
+	String getNombreFichero();
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
-    public void setRuta(String ruta) throws FileNotFoundException;
+    void setRuta(String ruta) throws FileNotFoundException;
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
 //------------------------------- METODOS AÑADIDOS -------------------------------------------//
-    public String[] extraerMetadatos();
+    String[] extraerMetadatos();
 //------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
 }
