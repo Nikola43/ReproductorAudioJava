@@ -1,3 +1,5 @@
+import Gestion.GestionListaReproduccion;
+
 import java.util.Scanner;
 
 public class Main
@@ -129,8 +131,14 @@ public class Main
                         {
                             System.out.println("Se ha agregado la cancion correctamente");
                         }
+                    break;
 
-                        break;
+                    case '5' :
+                        if (gestionListaReproduccion.agregarCancionesListaReproduccion())
+                        {
+                            System.out.println("Se ha agregado la cancion correctamente");
+                        }
+                    break;
                 }
 
                 //Preguntamos si quiere volver a ejecutar el programa
@@ -145,7 +153,7 @@ public class Main
 
     private static void mostrarMenuPrincipal()
     {
-        System.out.println("\t -:||Reproductor de Audio 3000 ||:- \n");
+        System.out.println("\t -:||Interfaces.Reproductor de Audio 3000 ||:- \n");
         System.out.println("1. Mostrar listas de reproduccion existentes");
         System.out.println("2. Crear lista de reproducción");
         System.out.println("3. Borrar lista de reproducción");
