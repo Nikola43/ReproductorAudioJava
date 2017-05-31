@@ -279,7 +279,7 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
             e.printStackTrace();
         }
 
-        //Guardamos los datos de la cancion
+        //Extraemos los datos de la cancion
         metadatosCancion[0] = metadata.get("dc:title")          == null ? "Desconocido": metadata.get("dc:title");
         metadatosCancion[1] = metadata.get("xmpDM:artist")      == null ? "Desconocido": metadata.get("xmpDM:artist");
         metadatosCancion[2] = metadata.get("xmpDM:trackNumber") == null ? "Desconocido": metadata.get("xmpDM:trackNumber");
@@ -287,7 +287,6 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
         metadatosCancion[4] = metadata.get("xmpDM:releaseDate") == null ? "Desconocido": metadata.get("xmpDM:releaseDate");
         metadatosCancion[5] = metadata.get("xmpDM:genre")       == null ? "Desconocido": metadata.get("xmpDM:genre");
         metadatosCancion[6] = metadata.get("xmpDM:duration")    == null ? "Desconocido": metadata.get("xmpDM:duration");
-        //metadatosCancion[6] = horas+":"+minutos+":"+segundos;
 
         return metadatosCancion;
     }

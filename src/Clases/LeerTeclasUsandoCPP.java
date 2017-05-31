@@ -1,5 +1,9 @@
 package Clases;
 
+import Interfaces.Cancion;
+
+import java.util.ArrayList;
+
 public class LeerTeclasUsandoCPP
 {
 
@@ -7,7 +11,7 @@ public class LeerTeclasUsandoCPP
     native int leerTecla();
     native boolean hayTeclaPulsada();
 
-    //Cargamos la libreria compilada 'leerTeclasCPP.dll' que contiene el metodo leerTecla()
+    //Cargamos la libreria compilada 'leerTeclasCPP.dll' que contiene los 6
     static 
     {
         System.loadLibrary("leerTeclasCPP");
