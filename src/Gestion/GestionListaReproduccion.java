@@ -3,6 +3,7 @@ package Gestion;
 import Clases.CancionImpl;
 import Clases.ListaDeReproduccionImpl;
 import Clases.ReproductorImpl;
+import Excepciones.CancionException;
 
 import javax.media.Player;
 import java.io.*;
@@ -35,7 +36,7 @@ public class GestionListaReproduccion
                 if (ficheros[i].isFile() == true)
                 {
                     //Si la extension es una extension de un fichero de audio
-                    if ( esCancion(ficheros[i].getName()) )
+                    if ( CancionImpl.esCancion(ficheros[i].getName()) )
                     {
                         nombresDeCanciones.add(ficheros[i].getName());
                     }
@@ -68,7 +69,7 @@ public class GestionListaReproduccion
                 if (ficheros[i].isFile() == true)
                 {
                     //Si la extension es una extension de un fichero de audio
-                    if ( esListaReproduccion(ficheros[i].getName()) )
+                    if ( ListaDeReproduccionImpl.esListaReproduccion(ficheros[i].getName()) )
                     {
                         nombresListas.add(ficheros[i].getName());
                     }
@@ -508,13 +509,11 @@ public class GestionListaReproduccion
                 catch (MalformedURLException e)
                 {
                     e.printStackTrace();
-                }
-                catch (FileNotFoundException e)
-                {
+                } catch (CancionException e) {
                     e.printStackTrace();
                 }
 
-                    //Insertamos una nueva cancion en la lista
+                //Insertamos una nueva cancion en la lista
                     listaDeCanciones.add(cancionAuxiliar);
 
                     //Preguntamos al usuario si desea continuar agregando canciones
@@ -587,7 +586,10 @@ public class GestionListaReproduccion
             {
                 e.printStackTrace();
             }
-            finally
+            catch (CancionException e)
+            {
+                e.printStackTrace();
+            } finally
             {
                 //Cerramos el fichero
                 try

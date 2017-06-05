@@ -2,6 +2,7 @@ package Clases;
 
 import Interfaces.ListaDeReproduccion;
 
+import java.io.File;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -214,6 +215,32 @@ public class ListaDeReproduccionImpl implements ListaDeReproduccion, Cloneable, 
 //------------------------------- FIN METODOS SOBRESCRITOS -----------------------------------//
 
 //------------------------------- METODOS AÑADIDOS -------------------------------------------//
+public static boolean esListaReproduccion(String nombreListaReproduccion)
+{
+    boolean soyListaReproduccion = false;
+    String extensionFichero;
+    String extensionListaReproduccion = ".lis";
+    File fichero = new File(nombreListaReproduccion);
+
+    //Comprobamos si el fichero existe
+    if (fichero.exists())
+    {
+        //Comprobamos el tipo de fichero
+        if(fichero.isFile())
+        {
+            //Guardamos la extencion de los ficheros
+            extensionFichero = "."+fichero.getName().charAt(fichero.getName().length() - 3)+fichero.getName().charAt(fichero.getName().length() - 2)+fichero.getName().charAt(fichero.getName().length() - 1);
+
+            //Si la extension es '.lis' entonces ese fichero es una lista de reproduccion
+            if (extensionFichero.compareTo(extensionListaReproduccion) == 0)
+            {
+                soyListaReproduccion = true;
+            }
+        }
+    }
+
+    return soyListaReproduccion;
+}
 //------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
 
 }
