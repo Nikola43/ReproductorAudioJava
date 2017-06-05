@@ -818,8 +818,9 @@ public class GestionListaReproduccion
             catch (IOException e)
             {
                 e.printStackTrace();
-            }
-            finally
+            } catch (CancionException e) {
+                e.printStackTrace();
+            } finally
             {
                 //Cerramos el fichero
                 try

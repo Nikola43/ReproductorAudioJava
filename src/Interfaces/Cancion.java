@@ -10,6 +10,8 @@ package Interfaces;/*
             -
 */
 
+import Excepciones.CancionException;
+
 import java.io.FileNotFoundException;
 
 public interface Cancion
@@ -20,7 +22,7 @@ public interface Cancion
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
-    void setRuta(String ruta) throws FileNotFoundException;
+    void setRuta(String ruta) throws CancionException;
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
 //------------------------------- METODOS AÑADIDOS -------------------------------------------//

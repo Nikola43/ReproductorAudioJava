@@ -1,6 +1,7 @@
 package Tests;
 
 import Clases.CancionImpl;
+import Excepciones.CancionException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +21,7 @@ public class TestCancion
         {
             cancionSobrecargada = new CancionImpl("Maybe.mp3");
         }
-        catch (FileNotFoundException e)
+        catch (CancionException e)
         {
             e.printStackTrace();
         }
@@ -32,7 +33,7 @@ public class TestCancion
         {
             cancionDefecto.setRuta("Over.mp3");
         }
-        catch (FileNotFoundException e)
+        catch (CancionException e)
         {
             e.printStackTrace();
         }

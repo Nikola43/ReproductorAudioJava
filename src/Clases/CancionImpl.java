@@ -117,17 +117,16 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
     @Override
-    public void setRuta(String ruta) throws FileNotFoundException {
-        //Si el fichero existe
-        if (new File(ruta).exists())
+    public void setRuta(String ruta) throws CancionException
+    {
+        if (esCancion(ruta))
         {
             this.ruta = ruta;
         }
         else
         {
-            throw new FileNotFoundException("La ruta del fichero no es válida");
+            throw new CancionException("El fichero no es un fichero de audio válido");
         }
-        this.ruta = ruta;
     }
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 

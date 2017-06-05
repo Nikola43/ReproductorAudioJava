@@ -1,6 +1,8 @@
 package Tests;
 
 import Clases.CancionImpl;
+import Clases.ListaDeReproduccionImpl;
+import Excepciones.CancionException;
 import Gestion.GestionListaReproduccion;
 
 import java.io.FileNotFoundException;
@@ -11,14 +13,16 @@ public class TestGestionListaReproduccion
     {
         try {
             CancionImpl cancion = new CancionImpl("Over.mp3");
-        } catch (FileNotFoundException e) {
+        }
+        catch (CancionException e)
+        {
             e.printStackTrace();
         }
         GestionListaReproduccion gestionListaReproduccion = new GestionListaReproduccion();
 
         //Test metodos EsUn
-        System.out.println("Es una cancion: "+gestionListaReproduccion.esCancion("Over.mp3"));
-        System.out.println("Es una lista: "+gestionListaReproduccion.esListaReproduccion("ListasDeReproduccion/ListaReproduccion.lis"));
+        System.out.println("Es una cancion: "+CancionImpl.esCancion("Over.mp3"));
+        System.out.println("Es una lista: "+ ListaDeReproduccionImpl.esListaReproduccion("ListasDeReproduccion/ListaReproduccion.lis"));
 
         //Test mostrar canciones
         //gestionListaReproduccion.mostrarCancionesDisponibles("Canciones/");

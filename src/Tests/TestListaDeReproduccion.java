@@ -2,6 +2,7 @@ package Tests;
 
 import Clases.CancionImpl;
 import Clases.ListaDeReproduccionImpl;
+import Excepciones.CancionException;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -14,9 +15,11 @@ public class TestListaDeReproduccion
         ArrayList<CancionImpl> lista2 = new ArrayList<>();
         ArrayList<CancionImpl> lista3 = new ArrayList<>();
 
-        try {
+        try
+        {
             lista1.add(new CancionImpl("Overs.mp3"));
-        } catch (FileNotFoundException e) {
+        }
+        catch (CancionException e) {
             e.printStackTrace();
         }
 
@@ -32,7 +35,8 @@ public class TestListaDeReproduccion
             listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("dance.mp3"));
             listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("Maybe.mp3"));
             listaDeReproduccionCopia.getListaCanciones().add(new CancionImpl("Maybe.mp3"));
-        } catch (FileNotFoundException e) {
+        }
+        catch (CancionException e) {
             e.printStackTrace();
         }
 
