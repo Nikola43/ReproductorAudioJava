@@ -390,7 +390,7 @@ public void reproducirCancion(CancionImpl cancion)
                 e.printStackTrace();
             }
 
-            manejarReproduccion();
+            //manejarReproduccion();
 
 
 

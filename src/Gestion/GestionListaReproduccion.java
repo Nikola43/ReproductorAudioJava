@@ -13,61 +13,6 @@ import java.util.Scanner;
 
 public class GestionListaReproduccion
 {
-    public boolean esCancion(String nombreFichero)
-    {
-        boolean soyCancion = false;
-        String extensionFichero;
-        String[] extensionesValidas = {".mp3", ".wav", ".ogg"};
-        File fichero = new File(nombreFichero);
-
-
-        //Comprobamos si el fichero existe
-        if (fichero.exists())
-        {
-            //Comprobamos el tipo de fichero
-            if(fichero.isFile())
-            {
-                //Guardamos la extencion de los ficheros
-                extensionFichero = "."+fichero.getName().charAt(fichero.getName().length() - 3)+fichero.getName().charAt(fichero.getName().length() - 2)+fichero.getName().charAt(fichero.getName().length() - 1);
-
-                //Si la extension es '.lis' entonces ese fichero es una lista de reproduccion
-                if (extensionFichero.compareTo(extensionesValidas[0]) == 0 || extensionFichero.compareTo(extensionesValidas[1]) == 0 || extensionFichero.compareTo(extensionesValidas[2]) == 0 )
-                {
-                    soyCancion = true;
-                }
-            }
-        }
-
-        return soyCancion;
-    }
-
-    public boolean esListaReproduccion(String nombreListaReproduccion)
-    {
-        boolean soyListaReproduccion = false;
-        String extensionFichero;
-        String extensionListaReproduccion = ".lis";
-        File fichero = new File(nombreListaReproduccion);
-
-        //Comprobamos si el fichero existe
-        if (fichero.exists())
-        {
-            //Comprobamos el tipo de fichero
-            if(fichero.isFile())
-            {
-                //Guardamos la extencion de los ficheros
-                extensionFichero = "."+fichero.getName().charAt(fichero.getName().length() - 3)+fichero.getName().charAt(fichero.getName().length() - 2)+fichero.getName().charAt(fichero.getName().length() - 1);
-
-                //Si la extension es '.lis' entonces ese fichero es una lista de reproduccion
-                if (extensionFichero.compareTo(extensionListaReproduccion) == 0)
-                {
-                    soyListaReproduccion = true;
-                }
-            }
-        }
-
-        return soyListaReproduccion;
-    }
-
     public ArrayList<String> devolverListadoFicherosCancion(String directorio)
     {
         ArrayList<String> nombresDeCanciones = new ArrayList<>();

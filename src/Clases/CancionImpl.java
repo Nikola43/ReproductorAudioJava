@@ -2,6 +2,7 @@ package Clases;
 
 import java.io.*;
 
+import Excepciones.CancionException;
 import Interfaces.Cancion;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -31,7 +32,7 @@ import org.xml.sax.SAXException;
             public int hashCode()
             public Clases.CancionImpl clone()
             public boolean equals(Object object)
-            public int compareTo(Clases.CancionImpl cancion)
+            public int compareTo(CancionImpl cancion)
 */
 
 public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>, Serializable
@@ -53,16 +54,16 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
         ruta = null;
     }
     //CONSTRUCTOR SOBRECARGADO
-    public CancionImpl(String ruta) throws FileNotFoundException
+    public CancionImpl(String ruta) throws CancionException
     {
         //Si el fichero existe
-        if (new File(ruta).exists())
+        if (esCancion(ruta))
         {
             this.ruta = ruta;
         }
         else
         {
-            throw new FileNotFoundException("La ruta del fichero no es válida");
+            throw new CancionException("El fichero no es un fichero de audio válido");
         }
     }
     //CONSTRUCTOR DE COPIA
@@ -100,7 +101,7 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
                 Devolvera el nombre del fichero junto con el formato
             Entrada/Salida:
                 -
-        */
+    */
     @Override
     public String getNombreFichero()
     {
@@ -289,6 +290,29 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
         metadatosCancion[6] = metadata.get("xmpDM:duration")    == null ? "Desconocido": metadata.get("xmpDM:duration");
 
         return metadatosCancion;
+    }
+
+    public static boolean esCancion(String nombreFichero)
+    {
+        boolean soyCancion = false;
+        String extensionFichero;
+        String[] extensionesValidas = {".mp3", ".wav", ".ogg"};
+        File fichero = new File(nombreFichero);
+
+        //Comprobamos si el fichero existe y es tipo de fichero
+        if(fichero.exists() && fichero.isFile())
+        {
+            //Guardamos la extencion del fichero
+            extensionFichero = "."+fichero.getName().charAt(fichero.getName().length() - 3)+fichero.getName().charAt(fichero.getName().length() - 2)+fichero.getName().charAt(fichero.getName().length() - 1);
+
+            //Si la extension es .mp3, .wav u .ogg entonces el fichero es un fichero de audio válido
+            if (extensionFichero.compareTo(extensionesValidas[0]) == 0 || extensionFichero.compareTo(extensionesValidas[1]) == 0 || extensionFichero.compareTo(extensionesValidas[2]) == 0 )
+            {
+                soyCancion = true;
+            }
+        }
+
+        return soyCancion;
     }
 //------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
 

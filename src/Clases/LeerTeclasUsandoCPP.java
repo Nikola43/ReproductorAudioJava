@@ -34,7 +34,7 @@ public class LeerTeclasUsandoCPP
         //Mientras la tecla pulsada sea distinto de ESC
         while( teclaPulsada != ESC )
         {
-            if ( teclas.hayTeclaPulsada() == true )
+            if ( teclas.hayTeclaPulsada()  )
             {
             	//leemos la tecla usando el metodo escrito en c que esta dentro de la libreria que compilamos
             	teclaPulsada = teclas.leerTecla(); 
