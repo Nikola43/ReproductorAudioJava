@@ -182,7 +182,7 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
     @Override
     public int compareTo(CancionImpl cancion)
     {
-        int compareTo = -1;
+        int compareTo = 0;
 
         if ( cancion != null )
         {
@@ -193,10 +193,6 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
             else if ( this.getNombreFichero().compareTo(cancion.getNombreFichero()) < 0 )
             {
                 compareTo = -1;
-            }
-            else
-            {
-                compareTo = 0;
             }
         }
         return compareTo;
