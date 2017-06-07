@@ -14,87 +14,42 @@ import java.util.Scanner;
 
 public class GestionListaReproduccion
 {
-    public ArrayList<String> devolverListadoFicherosCancion(String directorio)
+    /* INTERFAZ
+        Cabecera:
+            public static boolean esCancion(String nombreFichero)
+        Descripcion:
+            Comprueba si es un fichero tipo cancion
+        Entradas:
+            String
+        Precondiciones:
+            Se le pasara el nombre de un fichero
+        Salidas:
+            Un boolean
+        Postcondiciones:
+            Devolvera TRUE Cuando el fichero tenga la extension .mp3, .wav o .ogg
+        Entrada/Salida:
+    */
+    public boolean esCancion(String nombreFichero)
     {
-        ArrayList<String> nombresDeCanciones = new ArrayList<>();
+        boolean soyCancion = false;
+        String extensionFichero;
+        String[] extensionesValidas = {".mp3", ".wav", ".ogg"};
+        File fichero = new File(nombreFichero);
 
-        File[] ficheros;
-
-        //Creamos el fichero
-        File miDirectorio = new File(directorio);
-
-        //Comprobamos si el fichero existe
-        if (miDirectorio.exists())
+        //Comprobamos si el fichero existe y es tipo de fichero
+        if(fichero.exists() && fichero.isFile())
         {
-            //Creamos array con los ficheros del directorio
-            ficheros = miDirectorio.listFiles();
+            //Guardamos la extencion del fichero
+            extensionFichero = "."+fichero.getName().charAt(fichero.getName().length() - 3)+fichero.getName().charAt(fichero.getName().length() - 2)+fichero.getName().charAt(fichero.getName().length() - 1);
 
-            //Recorremos todos los ficheros del directorio
-            for (int i = 0; i < ficheros.length; i++)
+            //Si la extension es .mp3, .wav u .ogg entonces el fichero es un fichero de audio válido
+            if (extensionFichero.compareTo(extensionesValidas[0]) == 0 || extensionFichero.compareTo(extensionesValidas[1]) == 0 || extensionFichero.compareTo(extensionesValidas[2]) == 0 )
             {
-                //Comprobamos el tipo de fichero
-                if (ficheros[i].isFile() == true)
-                {
-                    //Si la extension es una extension de un fichero de audio
-                    if ( CancionImpl.esCancion(ficheros[i].getName()) )
-                    {
-                        nombresDeCanciones.add(ficheros[i].getName());
-                    }
-                }
+                soyCancion = true;
             }
         }
-        return nombresDeCanciones;
-    }
 
-
-    public ArrayList<String> devolverListadoFicherosLista(String directorio)
-    {
-        ArrayList<String> nombresListas = new ArrayList<>();
-
-        File[] ficheros;
-
-        //Creamos el fichero
-        File miDirectorio = new File(directorio);
-
-        //Comprobamos si el fichero existe
-        if (miDirectorio.exists())
-        {
-            //Creamos array con los ficheros del directorio
-            ficheros = miDirectorio.listFiles();
-
-            //Recorremos todos los ficheros del directorio
-            for (int i = 0; i < ficheros.length; i++)
-            {
-                //Comprobamos el tipo de fichero
-                if (ficheros[i].isFile() == true)
-                {
-                    //Si la extension es una extension de un fichero de audio
-                    if ( ListaDeReproduccionImpl.esListaReproduccion(ficheros[i].getName()) )
-                    {
-                        nombresListas.add(ficheros[i].getName());
-                    }
-                }
-            }
-        }
-        return nombresListas;
-    }
-
-    public void mostrarListasReproduccionExistentes(String rutaDirectorioListas)
-    {
-        int numeroListas = devolverListadoFicherosLista(rutaDirectorioListas).size();
-
-        if ( numeroListas > 0 )
-        {
-            System.out.println("Listas Disponibles: ");
-            for (int i=0; i < numeroListas; i++)
-            {
-                System.out.println("\t"+(i+1)+". "+ devolverListadoFicherosLista(rutaDirectorioListas).get(i));
-            }
-        }
-        else
-        {
-            System.out.println("No hay ninguna lista de reproduccion");
-        }
+        return soyCancion;
     }
 
     /* INTERFAZ
@@ -156,6 +111,92 @@ public class GestionListaReproduccion
             e.printStackTrace();
         }
     }
+
+
+    public ArrayList<String> devolverListadoFicherosCancion(String directorio)
+    {
+        ArrayList<String> nombresDeCanciones = new ArrayList<>();
+
+        File[] ficheros;
+
+        //Creamos el fichero
+        File miDirectorio = new File(directorio);
+
+        //Comprobamos si el fichero existe
+        if (miDirectorio.exists())
+        {
+            //Creamos array con los ficheros del directorio
+            ficheros = miDirectorio.listFiles();
+
+            //Recorremos todos los ficheros del directorio
+            for (int i = 0; i < ficheros.length; i++)
+            {
+                //Comprobamos el tipo de fichero
+                if (ficheros[i].isFile() == true)
+                {
+                    //Si la extension es una extension de un fichero de audio
+                    if ( esCancion(ficheros[i].getName()) )
+                    {
+                        nombresDeCanciones.add(ficheros[i].getName());
+                    }
+                }
+            }
+        }
+        return nombresDeCanciones;
+    }
+
+
+    public ArrayList<String> devolverListadoFicherosLista(String directorio)
+    {
+        ArrayList<String> nombresListas = new ArrayList<>();
+
+        File[] ficheros;
+
+        //Creamos el fichero
+        File miDirectorio = new File(directorio);
+
+        //Comprobamos si el fichero existe
+        if (miDirectorio.exists())
+        {
+            //Creamos array con los ficheros del directorio
+            ficheros = miDirectorio.listFiles();
+
+            //Recorremos todos los ficheros del directorio
+            for (int i = 0; i < ficheros.length; i++)
+            {
+                //Comprobamos el tipo de fichero
+                if (ficheros[i].isFile() == true)
+                {
+                    //Si la extension es una extension de un fichero de audio
+                    if ( ListaDeReproduccionImpl.esListaReproduccion(ficheros[i].getName()) )
+                    {
+                        nombresListas.add(ficheros[i].getName());
+                    }
+                }
+            }
+        }
+        return nombresListas;
+    }
+
+    public void mostrarListasReproduccionExistentes(String rutaDirectorioListas)
+    {
+        int numeroListas = devolverListadoFicherosLista(rutaDirectorioListas).size();
+
+        if ( numeroListas > 0 )
+        {
+            System.out.println("Listas Disponibles: ");
+            for (int i=0; i < numeroListas; i++)
+            {
+                System.out.println("\t"+(i+1)+". "+ devolverListadoFicherosLista(rutaDirectorioListas).get(i));
+            }
+        }
+        else
+        {
+            System.out.println("No hay ninguna lista de reproduccion");
+        }
+    }
+
+
 
     public boolean agregarCancionesListaReproduccion()
     {
