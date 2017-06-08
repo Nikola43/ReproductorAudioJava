@@ -16,8 +16,108 @@ import java.util.Scanner;
 
 public class GestionListaReproduccion
 {
+<<<<<<< HEAD
 
 
+=======
+    /* INTERFAZ
+        Cabecera:
+            public static boolean esCancion(String nombreFichero)
+        Descripcion:
+            Comprueba si es un fichero tipo cancion
+        Entradas:
+            String
+        Precondiciones:
+            Se le pasara el nombre de un fichero
+        Salidas:
+            Un boolean
+        Postcondiciones:
+            Devolvera TRUE Cuando el fichero tenga la extension .mp3, .wav o .ogg
+        Entrada/Salida:
+    */
+    public boolean esCancion(String nombreFichero)
+    {
+        boolean soyCancion = false;
+        String extensionFichero;
+        String[] extensionesValidas = {".mp3", ".wav", ".ogg"};
+        File fichero = new File(nombreFichero);
+
+        //Comprobamos si el fichero existe y es tipo de fichero
+        if(fichero.exists() && fichero.isFile())
+        {
+            //Guardamos la extencion del fichero
+            extensionFichero = "."+fichero.getName().charAt(fichero.getName().length() - 3)+fichero.getName().charAt(fichero.getName().length() - 2)+fichero.getName().charAt(fichero.getName().length() - 1);
+
+            //Si la extension es .mp3, .wav u .ogg entonces el fichero es un fichero de audio válido
+            if (extensionFichero.compareTo(extensionesValidas[0]) == 0 || extensionFichero.compareTo(extensionesValidas[1]) == 0 || extensionFichero.compareTo(extensionesValidas[2]) == 0 )
+            {
+                soyCancion = true;
+            }
+        }
+
+        return soyCancion;
+    }
+
+    /* INTERFAZ
+       Cabecera:
+           public void crearListaReproduccion()
+       Descripcion:
+           Permite al usuario crear una lista de reproduccion con sus canciones favoritas
+       Precondiciones:
+           -
+       Entradas:
+           -
+       Salidas:
+           -
+       Postcondiciones:
+           -
+       Entradas/Salidas:
+           -
+     */
+    public void guardarListaReproduccion(ListaDeReproduccionImpl listaDeReproduccion)
+    {
+        //Asignamos el fichero a un tipo file
+        File ficheroListaReproduccion = new File(listaDeReproduccion.getNombre());
+
+        RandomAccessFile randomAccessFile;
+
+        int posicionPuntero = 0;
+
+        try
+        {
+            //Abrimos el fichero
+            randomAccessFile = new RandomAccessFile(ficheroListaReproduccion, "rw");
+
+            //Escribimos el numero de canciones que tiene la lista
+            randomAccessFile.seek(posicionPuntero);
+            randomAccessFile.writeUTF(String.valueOf(listaDeReproduccion.getNumeroCanciones()));
+
+            //Escribimos el nombre de la lista
+            posicionPuntero = 50;
+            randomAccessFile.seek(posicionPuntero);
+            randomAccessFile.writeUTF(listaDeReproduccion.getNombre());
+
+            posicionPuntero = 0;
+
+            for (int i = 0; i < listaDeReproduccion.getNumeroCanciones(); i++)
+            {
+                posicionPuntero += 100;
+                System.out.println(posicionPuntero);
+                randomAccessFile.seek(posicionPuntero);
+                randomAccessFile.writeUTF(listaDeReproduccion.getListaCanciones().get(i).getRuta());
+            }
+            randomAccessFile.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+>>>>>>> 99d058647a003d4fea940778d1f644ba9838c2d4
 
 
     public ArrayList<String> devolverListadoFicherosCancion(String directorio)
@@ -42,7 +142,11 @@ public class GestionListaReproduccion
                 if (ficheros[i].isFile() )
                 {
                     //Si la extension es una extension de un fichero de audio
+<<<<<<< HEAD
                     if (UtilFicheros.ficheroEsCancion(ficheros[i].getName()) )
+=======
+                    if ( esCancion(ficheros[i].getName()) )
+>>>>>>> 99d058647a003d4fea940778d1f644ba9838c2d4
                     {
                         canciones.add(ficheros[i].getName());
                     }
@@ -103,6 +207,7 @@ public class GestionListaReproduccion
             System.out.println("\t"+(i + 1) + ". " + listaCanciones.get(i));
         }
     }
+<<<<<<< HEAD
     
     /* INTERFAZ
        Cabecera:
@@ -173,6 +278,10 @@ public class GestionListaReproduccion
             }
         }
     }
+=======
+
+
+>>>>>>> 99d058647a003d4fea940778d1f644ba9838c2d4
 
     public boolean agregarCancionesListaReproduccion()
     {

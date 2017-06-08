@@ -52,7 +52,12 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
     //CONSTRUCTOR SOBRECARGADO
     public CancionImpl(String ruta) throws CancionException
     {
+<<<<<<< HEAD
         if (UtilFicheros.ficheroEsCancion(ruta))
+=======
+        //Si es un fichero de tipo cancion
+        if ( esCancion(ruta) )
+>>>>>>> 99d058647a003d4fea940778d1f644ba9838c2d4
         {
             this.ruta = ruta;
         }
@@ -113,7 +118,12 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
     @Override
     public void setRuta(String ruta) throws CancionException
     {
+<<<<<<< HEAD
         if (UtilFicheros.ficheroEsCancion(ruta))
+=======
+        //Si es cancion
+        if ( )
+>>>>>>> 99d058647a003d4fea940778d1f644ba9838c2d4
         {
             this.ruta = ruta;
         }
@@ -280,8 +290,11 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
 
         return metadatosCancion;
     }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 99d058647a003d4fea940778d1f644ba9838c2d4
 //------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
 
 }
