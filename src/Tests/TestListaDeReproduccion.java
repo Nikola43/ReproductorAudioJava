@@ -3,6 +3,7 @@ package Tests;
 import Clases.CancionImpl;
 import Clases.ListaDeReproduccionImpl;
 import Excepciones.CancionException;
+import Excepciones.ListaDeReproduccionException;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -15,30 +16,39 @@ public class TestListaDeReproduccion
         ArrayList<CancionImpl> lista2 = new ArrayList<>();
         ArrayList<CancionImpl> lista3 = new ArrayList<>();
 
-        try
-        {
+
+        try {
             lista1.add(new CancionImpl("Overs.mp3"));
-        }
-        catch (CancionException e) {
+        } catch (CancionException e) {
             e.printStackTrace();
         }
 
+
         //Creamos 3 Listas de reproduccion con los diferentes constructores para probarlos todos
         ListaDeReproduccionImpl listaDeReproduccionDefecto = new ListaDeReproduccionImpl();
-        ListaDeReproduccionImpl listaDeReproduccionSobrecargada = new ListaDeReproduccionImpl("pepe.lis",lista1);
+        ListaDeReproduccionImpl listaDeReproduccionSobrecargada = null;
+        try {
+            listaDeReproduccionSobrecargada = new ListaDeReproduccionImpl("pepe.lis",lista1);
+        } catch (ListaDeReproduccionException e) {
+            e.printStackTrace();
+        }
         ListaDeReproduccionImpl listaDeReproduccionCopia = new ListaDeReproduccionImpl(listaDeReproduccionSobrecargada);
 
         //Test metodos modificadores
-        listaDeReproduccionDefecto.setNombre("paulo.lis");
+
+            listaDeReproduccionDefecto.setNombre("paulo.lis");
+
         listaDeReproduccionDefecto.setListaCanciones(new ArrayList<>());
+
         try {
             listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("dance.mp3"));
             listaDeReproduccionDefecto.getListaCanciones().add(new CancionImpl("Maybe.mp3"));
             listaDeReproduccionCopia.getListaCanciones().add(new CancionImpl("Maybe.mp3"));
-        }
-        catch (CancionException e) {
+        } catch (CancionException e) {
             e.printStackTrace();
         }
+
+
 
 
         //Test metodos consultores

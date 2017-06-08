@@ -17,26 +17,24 @@ public class TestCancion
         CancionImpl cancionCopia = null;
         CancionImpl cancionClon = null;
 
-        try
-        {
+
+        try {
             cancionSobrecargada = new CancionImpl("Maybe.mp3");
-        }
-        catch (CancionException e)
-        {
+        } catch (CancionException e) {
             e.printStackTrace();
         }
+
 
         cancionCopia = new CancionImpl(cancionSobrecargada);
 
         //Test metodos modificadores
-        try
-        {
+
+        try {
             cancionDefecto.setRuta("Over.mp3");
-        }
-        catch (CancionException e)
-        {
+        } catch (CancionException e) {
             e.printStackTrace();
         }
+
 
         //Test metodos consultores
         System.out.println("Test metodos consultores");

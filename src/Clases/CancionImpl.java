@@ -1,9 +1,9 @@
 package Clases;
 
 import java.io.*;
-
 import Excepciones.CancionException;
 import Interfaces.Cancion;
+import Util.UtilFicheros;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -16,21 +16,17 @@ import org.xml.sax.SAXException;
     PROPIEDADES
         BASICAS
             String ruta | consultable y modificable
-
         DERIVADAS
-            String nombre | consultable
-
+            String nombreFichero | consultable
         COMPARTIDAS
             -
-
     RESTRICCIONES
-        -
-
+        La ruta de la cancion debe ser la ruta de un fichero de audio valido en el sistema
     INTERFAZ
         METODOS SOBRESCRITOS
             public String toString()
             public int hashCode()
-            public Clases.CancionImpl clone()
+            public CancionImpl clone()
             public boolean equals(Object object)
             public int compareTo(CancionImpl cancion)
 */
@@ -56,14 +52,13 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
     //CONSTRUCTOR SOBRECARGADO
     public CancionImpl(String ruta) throws CancionException
     {
-        //Si el fichero existe
-        if (esCancion(ruta))
+        if (UtilFicheros.ficheroEsCancion(ruta))
         {
             this.ruta = ruta;
         }
         else
         {
-            throw new CancionException("El fichero no es un fichero de audio válido");
+            throw new CancionException("El fichero debe ser un fichero de audio");
         }
     }
     //CONSTRUCTOR DE COPIA
@@ -100,7 +95,6 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
             Postcondiciones:
                 Devolvera el nombre del fichero junto con el formato
             Entrada/Salida:
-                -
     */
     @Override
     public String getNombreFichero()
@@ -119,13 +113,13 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
     @Override
     public void setRuta(String ruta) throws CancionException
     {
-        if (esCancion(ruta))
+        if (UtilFicheros.ficheroEsCancion(ruta))
         {
             this.ruta = ruta;
         }
         else
         {
-            throw new CancionException("El fichero no es un fichero de audio válido");
+            throw new CancionException("El fichero debe ser un fichero de audio");
         }
     }
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
@@ -165,7 +159,7 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
 
     /* INTERFAZ
        Cabecera:
-           public int compareTo(Clases.CancionImpl cancion)
+           public int compareTo(CancionImpl cancion)
        Descripcion:
           Compara una cancion con otra segun su nombre
        Precondiciones:
@@ -287,28 +281,7 @@ public class CancionImpl implements Cancion, Cloneable, Comparable<CancionImpl>,
         return metadatosCancion;
     }
 
-    public static boolean esCancion(String nombreFichero)
-    {
-        boolean soyCancion = false;
-        String extensionFichero;
-        String[] extensionesValidas = {".mp3", ".wav", ".ogg"};
-        File fichero = new File(nombreFichero);
 
-        //Comprobamos si el fichero existe y es tipo de fichero
-        if(fichero.exists() && fichero.isFile())
-        {
-            //Guardamos la extencion del fichero
-            extensionFichero = "."+fichero.getName().charAt(fichero.getName().length() - 3)+fichero.getName().charAt(fichero.getName().length() - 2)+fichero.getName().charAt(fichero.getName().length() - 1);
-
-            //Si la extension es .mp3, .wav u .ogg entonces el fichero es un fichero de audio válido
-            if (extensionFichero.compareTo(extensionesValidas[0]) == 0 || extensionFichero.compareTo(extensionesValidas[1]) == 0 || extensionFichero.compareTo(extensionesValidas[2]) == 0 )
-            {
-                soyCancion = true;
-            }
-        }
-
-        return soyCancion;
-    }
 //------------------------------- FIN METODOS AÑADIDOS ---------------------------------------//
 
 }

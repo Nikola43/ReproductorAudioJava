@@ -108,7 +108,9 @@ public class Main
                 switch (opcionMenu)
                 {
                     //Mostrar listas de reproduccion existentes
-                    case '1' : gestionListaReproduccion.mostrarListasReproduccionExistentes("."); break;
+                    case '1' :
+                        gestionListaReproduccion.mostrarListasReproduccionExistentes(".");
+                    break;
 
                     //Crear lista de reproducción
                     case '2' :

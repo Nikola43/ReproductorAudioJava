@@ -1,47 +1,34 @@
 package Clases;
 
-import Interfaces.Cancion;
-
-import java.util.ArrayList;
-
 public class LeerTeclasUsandoCPP
 {
+    //Definimos los metodos que tendra  un nuevo metodo nativo en C++
 
-	//creamos un nuevo metodo nativo en c++
+    /* INTERFAZ
+    Cabecera: JNIEXPORT jint JNICALL Java_LeerTeclasUsandoCPP_leerTecla(JNIEnv *, jobject)
+    Descripcion: Lee la tecla pulsada por el usuario
+    Entradas:
+    Precondiciones:
+    Salidas: Un entero
+    Postcondiciones: Devolverá el codigo ASCII correspondiente a la tecla pulsada
+    Entrada/Salida:
+    */
     native int leerTecla();
+
+    /* INTERFAZ
+    Cabecera: JNIEXPORT jboolean JNICALL Java_LeerTeclasUsandoCPP_hayTeclaPulsada(JNIEnv *, jobject)
+    Descripcion: Comprueba si se pulsa cualquier tecla del teclado
+    Entradas:
+    Precondiciones:
+    Salidas: Un boolean
+    Postcondiciones: Devolvera TRUE cuando se haya pulsado cualquier tecla, FALSE cuando no
+    Entrada/Salida:
+	*/
     native boolean hayTeclaPulsada();
 
-    //Cargamos la libreria compilada 'leerTeclasCPP.dll' que contiene los 6
-    static 
+    //Cargamos la libreria compilada 'leerTeclasCPP.dll'
+    static
     {
         System.loadLibrary("leerTeclasCPP");
-    }
-
-    //Clase principal
-    static public void main(String argv[]) 
-    {
-    	//Definicion de constantes con las teclas que usara el programa
-    	final int ESC = 27; 
-
-    	//Instanciamos un objeto tipo 'LeerTeclasUsandoCPP'
-        LeerTeclasUsandoCPP teclas = new LeerTeclasUsandoCPP();
-
-        //Creamos una variable para almacenar el codigo de la tecla pulsada
-        int teclaPulsada = 0;
-
-	System.out.println("Pulsa cualquier tecla");
-        
-        //Mientras la tecla pulsada sea distinto de ESC
-        while( teclaPulsada != ESC )
-        {
-            if ( teclas.hayTeclaPulsada()  )
-            {
-            	//leemos la tecla usando el metodo escrito en c que esta dentro de la libreria que compilamos
-            	teclaPulsada = teclas.leerTecla(); 
-
-            	//Imprimimos el codigo de la tecla pulsada
-            	System.out.println("\nCodigo ASCII: "+teclaPulsada+"    Tecla pulsada: "+(char)teclaPulsada);
-            }   
-        }
     }
 }

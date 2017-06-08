@@ -1,18 +1,19 @@
-package Interfaces;/*
+package Interfaces;
+/*
     PROPIEDADES
         BASICAS
             String ruta | consultable y modificable
 
         DERIVADAS
-            String nombre | consultable
+            String nombreFichero | consultable
 
         COMPARTIDAS
             -
+        RESTRICCIONES
+            La ruta de la cancion debe ser la ruta de un fichero de audio valido en el sistema
 */
 
 import Excepciones.CancionException;
-
-import java.io.FileNotFoundException;
 
 public interface Cancion
 {

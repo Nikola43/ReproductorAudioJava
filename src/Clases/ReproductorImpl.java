@@ -1,7 +1,6 @@
 package Clases;
 
 import Interfaces.Reproductor;
-
 import javax.media.*;
 import javax.media.format.AudioFormat;
 import java.io.IOException;
@@ -9,33 +8,33 @@ import java.io.Serializable;
 import java.net.URL;
 import java.time.Duration;
 
-public class ReproductorImpl implements Reproductor, Comparable<ReproductorImpl>, Serializable
+public class ReproductorImpl implements Reproductor, Serializable
 {
 //------------------------------- PROPIEDADES -----------------------------------------------//
     //BASICAS
     private Player reproductor;
 
     //DERIVADAS
-    //int estadoActual
+        //NINGUNA
 
     //COMPARTIDAS
-    //NINGUNA
+        //NINGUNA
 //------------------------------- FIN PROPIEDADES --------------------------------------------//
 
 //------------------------------- CONSTRUCTORES ----------------------------------------------//
-//CONSTRUCTOR POR DEFECTO
+    //CONSTRUCTOR POR DEFECTO
     public ReproductorImpl()
     {
         reproductor = null;
     }
 
-//CONSTRUCTOR SOBRECARGADO
+    //CONSTRUCTOR SOBRECARGADO
     public ReproductorImpl(Player reproductor)
     {
-         this.reproductor = reproductor;
+        this.reproductor = reproductor;
     }
 
-//CONSTRUCTOR DE COPIA
+    //CONSTRUCTOR DE COPIA
     public ReproductorImpl(ReproductorImpl reproductor)
     {
         this.reproductor = reproductor.getReproductor();
@@ -48,31 +47,6 @@ public class ReproductorImpl implements Reproductor, Comparable<ReproductorImpl>
     {
         return reproductor;
     }
-
-    /* INTERFAZ
-    Cabecera:
-        public int getEstadoActual()
-    Descripcion:
-        Devuelve el estado actual del reproductor
-    Precondiciones:
-        -
-    Entradas:
-        -
-    Salidas:
-        Un entero
-    Postcondiciones:
-        - Devolvera -1 cuando el reproductor este PARADO
-        - Devolvera 0  cuando el reproductor este PAUSADO
-        - Devolvera 1  cuando el reproductor este REPRODUCIENDO
-*/
-    public int getEstadoActual()
-    {
-        int estadoActual;
-
-        estadoActual = 1;
-
-        return estadoActual;
-    }
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
@@ -82,12 +56,12 @@ public class ReproductorImpl implements Reproductor, Comparable<ReproductorImpl>
     }
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
-    //------------------------------- METODOS SOBRESCRITOS ---------------------------------------//
+//------------------------------- METODOS SOBRESCRITOS ---------------------------------------//
     @Override
     public String toString()
     {
         String toString;
-        toString = getReproductor().toString()+","+getEstadoActual();
+        toString = getReproductor().toString();
         return toString;
     }
 
@@ -95,7 +69,7 @@ public class ReproductorImpl implements Reproductor, Comparable<ReproductorImpl>
     public int hashCode()
     {
         int hashCode;
-        hashCode = getReproductor().toString().charAt(5) * 12 + getEstadoActual() * 5 / 2 + getReproductor().toString().charAt(1);
+        hashCode = getReproductor().toString().charAt(5) * 12 * 5 / 2 + getReproductor().toString().charAt(1);
         return hashCode;
     }
 
@@ -113,79 +87,6 @@ public class ReproductorImpl implements Reproductor, Comparable<ReproductorImpl>
             e.printStackTrace();
         }
         return clonReproductor;
-    }
-
-    /* INTERFAZ
-       Cabecera:
-           public int compareTo(Clases.ReproductorImpl reproductor)
-       Descripcion:
-          Compara un reproductor con otro segun su estado
-       Precondiciones:
-          Ninguna
-       Entradas:
-          Un objeto reproductor
-       Salidas:
-          Un entero
-       Postcondiciones:
-          - Devolvera -1 cuando sea menor, 0 cuando sean iguales, 1 cuando sea mayor
-          - Sera menor cuando el estado del objeto que lanza el metodo sea inferior al objeto pasado por parametro
-          - Sera mayor cuando el estado del objeto que lanza el metodo sea superior al objeto pasado por parametro
-          - Sera igual cuando el estado del objeto que lanza el metodo sea iguales  al objeto pasado por parametro
-    */
-    @Override
-    public int compareTo(ReproductorImpl reproductor)
-    {
-        int compareTo = -1;
-
-        if ( reproductor != null )
-        {
-            if ( this.getEstadoActual() > reproductor.getEstadoActual()  )
-            {
-                compareTo = 1;
-            }
-            else if ( this.getEstadoActual() < reproductor.getEstadoActual() )
-            {
-                compareTo = -1;
-            }
-            else
-            {
-                compareTo = 0;
-            }
-        }
-        return compareTo;
-    }
-
-    /* INTERFAZ
-       Cabecera:
-           public boolean equals(Object object)
-       Descripcion:
-           Comprueba si el objeto que lanza el metodo es igual que el objeto pasado por parametro
-       Precondiciones:
-           Ninguna
-       Entradas:
-           Un objeto
-       Salidas:
-           Un booleano
-       Postcondiciones:
-           - Los objetos seran iguales cuando tengan
-           - Devolvera VERDADERO si los objetos son iguales y FALSO cuando no lo sean
-     */
-    @Override
-    public boolean equals(Object object)
-    {
-        boolean esIgual = false;
-
-        if (object != null && object instanceof ReproductorImpl)
-        {
-            ReproductorImpl reproductor = (ReproductorImpl) object;
-
-            //Si tienen el mismo nombre son canciones iguales
-            if (this.reproductor == reproductor.getReproductor() )
-            {
-                esIgual = true;
-            }
-        }
-        return esIgual;
     }
 //------------------------------- FIN METODOS SOBRESCRITOS -----------------------------------//
 
@@ -431,7 +332,7 @@ public void reproducirCancion(CancionImpl cancion)
         }
     }
 
-    public void refescarBarraProgreso()
+    private void refescarBarraProgreso()
     {
         try
         {

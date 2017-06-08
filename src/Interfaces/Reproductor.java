@@ -7,7 +7,7 @@ import javax.media.Player;
 /*
 PROPIEDADES
     BASICAS
-        Player reproductor | consultable y modificable
+        Player reproductor | consultable
 
     DERIVADAS
         int estadoActual
@@ -19,7 +19,6 @@ public interface Reproductor
 {
 //------------------------------- METODOS CONSULTORES ----------------------------------------//
     Player getReproductor();
-    int getEstadoActual();
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//

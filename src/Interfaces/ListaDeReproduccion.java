@@ -12,6 +12,7 @@ package Interfaces;/*
 */
 
 import Clases.CancionImpl;
+import Excepciones.ListaDeReproduccionException;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public interface ListaDeReproduccion
 //------------------------------- FIN METODOS CONSULTORES ------------------------------------//
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
-    void setNombre(String nombre);
+    void setNombre(String nombre) throws ListaDeReproduccionException;
     void setListaCanciones(ArrayList<CancionImpl> listaCanciones);
 //------------------------------- FIN METODOS MODIFICADORES ----------------------------------//
 
