@@ -120,7 +120,7 @@ public class Main
                         }
                     break;
 
-                    //Insertar cancion en lista de reproducción
+                    //Borrar lista de reproduccion
                     case '3' :
                         if (gestionListaReproduccion.borrarListaReproduccion())
                         {
@@ -128,6 +128,7 @@ public class Main
                         }
                     break;
 
+                    //Insertar cancion en lista de reproduccion
                     case '4' :
                         if (gestionListaReproduccion.agregarCancionesListaReproduccion())
                         {
@@ -135,6 +136,7 @@ public class Main
                         }
                     break;
 
+                    //Borrar cancion de lista de reproduccion
                     case '5' :
                         if (gestionListaReproduccion.agregarCancionesListaReproduccion())
                         {
@@ -155,7 +157,7 @@ public class Main
 
     private static void mostrarMenuPrincipal()
     {
-        System.out.println("\t -:||Interfaces.Reproductor de Audio 3000 ||:- \n");
+        System.out.println("\t -:|| Reproductor de Audio 3000 ||:- \n");
         System.out.println("1. Mostrar listas de reproduccion existentes");
         System.out.println("2. Crear lista de reproducción");
         System.out.println("3. Borrar lista de reproducción");

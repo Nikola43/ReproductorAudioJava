@@ -70,7 +70,13 @@ public class UtilFicheros
         boolean soyListaReproduccion = false;
         String extensionFichero;
         String extensionListaReproduccion = ".lis";
-        File fichero = new File(rutaListaReproduccion);
+
+        String [] rutaDescompuesta;
+
+        //Dividimos la ruta usando como separador la /
+        rutaDescompuesta = rutaListaReproduccion.split("/");
+
+        File fichero = new File(rutaDescompuesta[rutaDescompuesta.length - 1]);
 
         //Comprobamos si existe y si es tipo fichero
         if( fichero.exists() && fichero.isFile())

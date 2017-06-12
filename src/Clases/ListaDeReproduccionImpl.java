@@ -3,6 +3,7 @@ package Clases;
 import Excepciones.CancionException;
 import Excepciones.ListaDeReproduccionException;
 import Interfaces.ListaDeReproduccion;
+import Util.UtilFicheros;
 
 import java.io.File;
 import java.io.Serializable;
@@ -32,14 +33,14 @@ public class ListaDeReproduccionImpl implements ListaDeReproduccion, Cloneable, 
     }
     //CONSTRUCTOR SOBRECARGADO
     public ListaDeReproduccionImpl(String nombre, ArrayList<CancionImpl> listaCanciones) throws ListaDeReproduccionException {
-        File ficheroLista = new File(nombre);
-        if ( ficheroLista.exists() && ficheroLista.isFile() )
+
+        if (UtilFicheros.ficheroEsListaReproduccion(nombre))
         {
             this.nombre = nombre;
         }
         else
         {
-            throw new ListaDeReproduccionException("El fichero no es un fichero de audio válido");
+            throw new ListaDeReproduccionException("El fichero no es un fichero lista de reproduccion");
         }
         this.listaCanciones = listaCanciones;
     }
@@ -104,11 +105,16 @@ public class ListaDeReproduccionImpl implements ListaDeReproduccion, Cloneable, 
 
 //------------------------------- METODOS MODIFICADORES --------------------------------------//
     @Override
-    public void setNombre(String nombre)
+    public void setNombre(String nombre) throws ListaDeReproduccionException
     {
-
+        if (UtilFicheros.ficheroEsListaReproduccion(nombre))
+        {
             this.nombre = nombre;
-
+        }
+        else
+        {
+            throw new ListaDeReproduccionException("El fichero no es un fichero lista de reproduccion");
+        }
     }
 
     @Override

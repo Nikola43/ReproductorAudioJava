@@ -36,7 +36,11 @@ public class TestListaDeReproduccion
 
         //Test metodos modificadores
 
+        try {
             listaDeReproduccionDefecto.setNombre("paulo.lis");
+        } catch (ListaDeReproduccionException e) {
+            e.printStackTrace();
+        }
 
         listaDeReproduccionDefecto.setListaCanciones(new ArrayList<>());
 
