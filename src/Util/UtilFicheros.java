@@ -41,6 +41,8 @@ public class UtilFicheros
             //Si la extension es .mp3, .wav entonces el fichero es un fichero de audio válido
             if (extensionFichero.compareTo(".mp3") == 0 || extensionFichero.compareTo(".wav") == 0)
             {
+
+
                 soyCancion = true;
             }
         }
