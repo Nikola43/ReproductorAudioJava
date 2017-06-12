@@ -78,7 +78,7 @@ public class Main
     public static void main(String[] args)
     {
         //Constante para salir del programa
-        final char SALIR = '7';
+        final char SALIR = '8';
 
         //Variables para la respuestas del usuario
         char respuestaUsuario = 'n';
@@ -109,11 +109,14 @@ public class Main
                 {
                     //Mostrar listas de reproduccion existentes
                     case '1' :
-                        gestionListaReproduccion.mostrarListasReproduccionExistentes(".");
+                        gestionListaReproduccion.mostrarListasReproduccionExistentes(gestionListaReproduccion.devolverListadoFicherosLista("."));
                     break;
 
+                    //Mostrar contenido lista reproduccion
+                    case '2' : gestionListaReproduccion.mostrarContenidoListaReproduccion();break;
+
                     //Crear lista de reproducción
-                    case '2' :
+                    case '3' :
                         if (gestionListaReproduccion.crearListaReproduccion())
                         {
                             System.out.println("Se ha creado la lista correctamente");
@@ -121,7 +124,7 @@ public class Main
                     break;
 
                     //Borrar lista de reproduccion
-                    case '3' :
+                    case '4' :
                         if (gestionListaReproduccion.borrarListaReproduccion())
                         {
                             System.out.println("Se ha borrado la lista correctamente");
@@ -129,7 +132,7 @@ public class Main
                     break;
 
                     //Insertar cancion en lista de reproduccion
-                    case '4' :
+                    case '5' :
                         if (gestionListaReproduccion.agregarCancionesListaReproduccion())
                         {
                             System.out.println("Se ha agregado la cancion correctamente");
@@ -137,12 +140,13 @@ public class Main
                     break;
 
                     //Borrar cancion de lista de reproduccion
-                    case '5' :
-                        if (gestionListaReproduccion.agregarCancionesListaReproduccion())
-                        {
-                            System.out.println("Se ha agregado la cancion correctamente");
-                        }
+                    case '6' :
+                        gestionListaReproduccion.eliminarCancionesListaReproduccion();
+
                     break;
+
+                    //Reproducir lista de reproduccion
+                    case '7' :gestionListaReproduccion.seleccionarListaParaReproducir(); break;
                 }
 
                 //Preguntamos si quiere volver a ejecutar el programa
@@ -159,11 +163,12 @@ public class Main
     {
         System.out.println("\t -:|| Reproductor de Audio 3000 ||:- \n");
         System.out.println("1. Mostrar listas de reproduccion existentes");
-        System.out.println("2. Crear lista de reproducción");
-        System.out.println("3. Borrar lista de reproducción");
-        System.out.println("4. Insertar cancion en lista de reproducción");
-        System.out.println("5. Eliminar cancion de lista de reproducción");
-        System.out.println("6. Reproducir lista de reproducción");
-        System.out.println("7. Salir");
+        System.out.println("2. Mostrar contenido lista de reproduccion");
+        System.out.println("3. Crear lista de reproducción");
+        System.out.println("4. Borrar lista de reproducción");
+        System.out.println("5. Insertar cancion en lista de reproducción");
+        System.out.println("6. Eliminar cancion de lista de reproducción");
+        System.out.println("7. Reproducir lista de reproducción");
+        System.out.println("8. Salir");
     }
 }

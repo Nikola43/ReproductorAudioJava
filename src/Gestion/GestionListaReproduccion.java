@@ -16,6 +16,74 @@ import java.util.Scanner;
 
 public class GestionListaReproduccion
 {
+    public ListaDeReproduccionImpl leerFicheroListaReproduccion(String rutaListaDeReproduccion)
+    {
+        //Variables para leer la lista
+        File listaReproduccion = new File(rutaListaDeReproduccion);
+        RandomAccessFile randomAccessFile = null;
+        ListaDeReproduccionImpl listaDeReproduccion = new ListaDeReproduccionImpl();
+        ArrayList<CancionImpl> listaCanciones = new ArrayList<>();
+
+        int numeroCanciones;
+        String nombreListaReproduccion;
+        int posicionPuntero = 0;
+
+        String cancionActual;
+
+        //Si la lista existe la mostramos por pantalla
+        if( UtilFicheros.ficheroEsListaReproduccion(rutaListaDeReproduccion) )
+        {
+            try
+            {
+                randomAccessFile = new RandomAccessFile(listaReproduccion, "r");
+
+                //Leemos el numero de canciones
+                randomAccessFile.seek(posicionPuntero);
+                numeroCanciones = Integer.parseInt(randomAccessFile.readUTF());
+
+                //Volvemos al principio
+                posicionPuntero = 50;
+                randomAccessFile.seek(posicionPuntero);
+                nombreListaReproduccion = randomAccessFile.readUTF();
+
+                posicionPuntero = 0;
+                randomAccessFile.seek(0);
+
+                for ( int i = 0; i < numeroCanciones; i++)
+                {
+                    posicionPuntero += 100;
+                    randomAccessFile.seek(posicionPuntero);
+                    cancionActual = randomAccessFile.readUTF();
+
+                    if ( UtilFicheros.ficheroEsCancion(cancionActual))
+                    {
+                        listaCanciones.add(new CancionImpl(cancionActual));
+                    }
+                }
+                listaDeReproduccion = new ListaDeReproduccionImpl(nombreListaReproduccion, listaCanciones);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            } catch (CancionException e) {
+                e.printStackTrace();
+            } catch (ListaDeReproduccionException e) {
+                e.printStackTrace();
+            } finally
+            {
+                //Cerramos el fichero
+                try
+                {
+                    randomAccessFile.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return listaDeReproduccion;
+    }
 
 
     /* INTERFAZ
@@ -78,53 +146,19 @@ public class GestionListaReproduccion
         }
     }
 
-    public void mostrarListasReproduccionExistentes(String directorio)
+    public void mostrarListasReproduccionExistentes(ArrayList<String> listaListasDeReproduccion)
     {
-        File[] ficheros;
-
-        //Creamos el fichero
-        File miDirectorio = new File(directorio);
-
-        //Comprobamos si el fichero existe
-        if (miDirectorio.exists())
+        for( int i=0; i<listaListasDeReproduccion.size(); i++)
         {
-            //Creamos array con los ficheros del directorio
-            ficheros = miDirectorio.listFiles();
-
-            //Recorremos todos los ficheros del directorio
-            for (int i = 0; i < ficheros.length; i++)
-            {
-                //Comprobamos el tipo de fichero
-                if (UtilFicheros.ficheroEsListaReproduccion(ficheros[i].getName()) )
-                {
-                    System.out.println("\t"+(i + 1) + ". " + ficheros[i].getName());
-                }
-            }
+            System.out.println("\t"+(i + 1) + ". " + listaListasDeReproduccion.get(i));
         }
     }
 
-    public void mostrarCancionesExistentes(String ruta)
+    public void mostrarCancionesExistentes(ArrayList<String> listaCanciones)
     {
-        File[] ficheros;
-
-        //Creamos el fichero
-        File miDirectorio = new File(directorio);
-
-        //Comprobamos si el fichero existe
-        if (miDirectorio.exists())
+        for( int i=0; i<listaCanciones.size(); i++)
         {
-            //Creamos array con los ficheros del directorio
-            ficheros = miDirectorio.listFiles();
-
-            //Recorremos todos los ficheros del directorio
-            for (int i = 0; i < ficheros.length; i++)
-            {
-                //Comprobamos el tipo de fichero
-                if (UtilFicheros.ficheroEsCancion(ficheros[i].getName()) )
-                {
-                    System.out.println("\t"+(i + 1) + ". " + ficheros[i].getName());
-                }
-            }
+            System.out.println("\t"+(i + 1) + ". " + listaCanciones.get(i));
         }
     }
 
@@ -137,107 +171,148 @@ public class GestionListaReproduccion
         int listaSeleccionada;
         int cancionSeleccionada;
 
-        ArrayList<String> nombreListasReproduccion = devolverListadoFicherosLista(".");
-        ArrayList<String> nombreCanciones = devolverListadoFicherosCancion(".");
+        ArrayList<String> listaCanciones = devolverListadoFicherosCancion(".");
+        ArrayList<String> listaListasReproduccion = devolverListadoFicherosLista(".");
 
-        if ( nombreCanciones.size() > 0 && nombreListasReproduccion.size() > 0)
+        do
         {
+            //Pedimos
+            System.out.println("Estas son las listas disponibles: ");
+            mostrarListasReproduccionExistentes(listaListasReproduccion);
+
             do
             {
-                //Pedimos
-                System.out.println("Estas son las listas disponibles: ");
-                mostrarListasReproduccionExistentes(".");
+                System.out.print("Introduzca el numero de la lista a la que quiere agregar canciones: ");
+                listaSeleccionada = scanner.nextInt();
+            } while (listaSeleccionada < 0 || listaSeleccionada > listaListasReproduccion.size() );
+            System.out.println("Usted ha seleccionado la lista "+listaListasReproduccion.get(listaSeleccionada - 1)+"\n");
 
-                do
-                {
-                    System.out.println("Introduzca el numero de la lista a la que quiere agregar canciones");
-                    listaSeleccionada = scanner.nextInt();
-                } while (listaSeleccionada < 0 || listaSeleccionada > nombreListasReproduccion.size() );
+            //Pedimos al usuario que introduzca el nombre de la cancion que quiere añadir a su lista
+            System.out.println("Estas son las canciones disponibles: ");
+            mostrarCancionesExistentes(listaCanciones);
 
-                System.out.println("Usted ha seleccionado la lista "+nombreListasReproduccion.get(listaSeleccionada - 1)+"\n");
+            do
+            {
+                System.out.print("Introduce el numero de la cancion que quieres añadir: ");
+                cancionSeleccionada = scanner.nextInt();
+            } while (cancionSeleccionada < 0 || cancionSeleccionada > listaCanciones.size() );
 
-                //Pedimos al usuario que introduzca el nombre de la cancion que quiere añadir a su lista
-                System.out.println("Estas son las canciones disponibles: ");
+            insertadoCorrectamente = insertarCancionListaReproduccion(listaCanciones.get(cancionSeleccionada - 1), listaListasReproduccion.get(listaSeleccionada - 1));
 
-                mostrarCancionesExistentes(".");
-
-                do
-                {
-                    System.out.print("Introduce el numero de la cancion que quieres añadir: ");
-                    cancionSeleccionada = scanner.nextInt();
-                } while (cancionSeleccionada < 0 || cancionSeleccionada > nombreCanciones.size() );
-
-                insertadoCorrectamente = insertarCancionListaReproduccion(nombreCanciones.get(listaSeleccionada - 1), nombreListasReproduccion.get(cancionSeleccionada - 1));
-
-                //Preguntamos si quiere añadir mas canciones
-                do
-                {
-                    System.out.print("Desea agregar mas canciones a la lista(s/n)?: ");
-                    respuestaUsuario  = Character.toLowerCase(scanner.next().charAt(0));
-                } while ( respuestaUsuario != 's' && respuestaUsuario != 'n' );
+            //Preguntamos si quiere añadir mas canciones
+            do
+            {
+                System.out.print("Desea agregar mas canciones a la lista(s/n)?: ");
+                respuestaUsuario  = Character.toLowerCase(scanner.next().charAt(0));
+            } while ( respuestaUsuario != 's' && respuestaUsuario != 'n' );
 
             } while ( respuestaUsuario == 's' );
-        }
+
         return insertadoCorrectamente;
     }
 
     public void eliminarCancionesListaReproduccion()
     {
-        boolean eliminadoCorrectamente = false;
-
         char respuestaUsuario = 'n';
         Scanner scanner = new Scanner(System.in);
         int listaSeleccionada;
-        int cancionSeleccionada;
+        String cancionSeleccionada;
 
-        ArrayList<String> nombreListasReproduccion = devolverListadoFicherosLista(".");
-        ArrayList<String> nombreCanciones = devolverListadoFicherosCancion(".");
+        ArrayList<String> listaListasReproduccion = devolverListadoFicherosLista(".");
 
-        if ( nombreCanciones.size() > 0 && nombreListasReproduccion.size() > 0)
+
+        if ( listaListasReproduccion.size() > 0)
         {
             do
             {
-                //Pedimos
                 System.out.println("Estas son las listas disponibles: ");
-
-                //Mostramos las canciones disponibles
-                mostrarListasReproduccionExistentes(".");
+                mostrarListasReproduccionExistentes(listaListasReproduccion);
 
                 do
                 {
-                    System.out.println("Introduzca el numero de la lista a la que quiere eliminar canciones");
+                    System.out.println("Introduzca el numero de la lista a la que quiere eliminar canciones: ");
                     listaSeleccionada = scanner.nextInt();
-                } while (listaSeleccionada < 0 || listaSeleccionada > nombreListasReproduccion.size() );
+                } while (listaSeleccionada < 0 || listaSeleccionada > listaListasReproduccion.size() );
+                System.out.println("Usted ha seleccionado la lista "+listaListasReproduccion.get(listaSeleccionada - 1)+"\n");
 
-                System.out.println("Usted ha seleccionado la lista "+nombreListasReproduccion.get(listaSeleccionada - 1)+"\n");
 
-                //Pedimos al usuario que introduzca el nombre de la cancion que quiere añadir a su lista
                 System.out.println("Estas son las canciones disponibles: ");
-
-                //Mostramos las canciones disponibles
-                mostrarCancionesListaReproduccion(nombreListasReproduccion.get(listaSeleccionada - 1));
+                mostrarCancionesListaReproduccion(listaListasReproduccion.get(listaSeleccionada - 1));
 
                 do
                 {
-                    System.out.print("Introduce el numero de la cancion que quieres eliminar: ");
-                    cancionSeleccionada = scanner.nextInt();
-                } while (cancionSeleccionada < 0 || cancionSeleccionada > nombreCanciones.size() );
+                    System.out.print("Introduce el nombre de la cancion que quieres eliminar: ");
+                    cancionSeleccionada = scanner.nextLine();
+                } while ( buscarCancionListaReproduccion(cancionSeleccionada,listaListasReproduccion.get(listaSeleccionada - 1)) == -1);
 
-                marcarCancionListaReproduccion(nombreCanciones.get(cancionSeleccionada - 1),nombreListasReproduccion.get(listaSeleccionada - 1) );
-                //actualizarLista();
+                marcarCancionListaReproduccion(cancionSeleccionada,listaListasReproduccion.get(listaSeleccionada - 1) );
 
-                //eliminadoCorrectamente =
-
-                //Preguntamos si quiere añadir mas canciones
+                //Preguntamos si quiere borrar mas canciones
                 do
                 {
-                    System.out.print("Desea agregar mas canciones a la lista(s/n)?: ");
+                    System.out.print("Desea borrar mas canciones de la lista(s/n)?: ");
                     respuestaUsuario  = Character.toLowerCase(scanner.next().charAt(0));
                 } while ( respuestaUsuario != 's' && respuestaUsuario != 'n' );
 
             } while ( respuestaUsuario == 's' );
         }
         //return insertadoCorrectamente;
+    }
+
+    public ArrayList<String> devolverListadoFicherosCancion(String directorio)
+    {
+        File[] ficheros;
+
+        ArrayList<String> listaCanciones = new ArrayList<>();
+
+        //Creamos el fichero
+        File miDirectorio = new File(directorio);
+
+        //Comprobamos si el fichero existe
+        if (miDirectorio.exists())
+        {
+            //Creamos array con los ficheros del directorio
+            ficheros = miDirectorio.listFiles();
+
+            //Recorremos todos los ficheros del directorio
+            for (int i = 0; i < ficheros.length; i++)
+            {
+                //Comprobamos si el fichero es una cancion
+                if (UtilFicheros.ficheroEsCancion(ficheros[i].getName()) )
+                {
+                    listaCanciones.add(ficheros[i].getName());
+                }
+            }
+        }
+        return listaCanciones;
+    }
+
+    public ArrayList<String> devolverListadoFicherosLista(String directorio)
+    {
+        File[] ficheros;
+
+        ArrayList<String> listaListasDeReproduccion = new ArrayList<>();
+
+        //Creamos el fichero
+        File miDirectorio = new File(directorio);
+
+        //Comprobamos si el fichero existe
+        if (miDirectorio.exists())
+        {
+            //Creamos array con los ficheros del directorio
+            ficheros = miDirectorio.listFiles();
+
+            //Recorremos todos los ficheros del directorio
+            for (int i = 0; i < ficheros.length; i++)
+            {
+                //Comprobamos si el fichero es una lista de reproduccion
+                if (UtilFicheros.ficheroEsListaReproduccion(ficheros[i].getName()) )
+                {
+                    listaListasDeReproduccion.add(ficheros[i].getName());
+                }
+            }
+        }
+        return listaListasDeReproduccion;
     }
 
     public boolean insertarCancionListaReproduccion(String rutaCancion, String rutaListaDeReproduccion)
@@ -310,17 +385,32 @@ public class GestionListaReproduccion
         RandomAccessFile randomAccessFile = null;
 
         String cancionAuxiliar;
+        int numeroCanciones;
 
         //Posicion de la cancion que queremos eliminar
-        int posicionPuntero = buscarCancionListaReproduccion(nombreCancion, rutaListaDeReproduccion);
+        int posicionPuntero = 0;
+
+        try
+        {
+            randomAccessFile = new RandomAccessFile(listaReproduccion, "rw");
+            randomAccessFile.seek(posicionPuntero);
+            numeroCanciones = Integer.parseInt(randomAccessFile.readUTF());
+
+            numeroCanciones -= 1;
+            randomAccessFile.seek(posicionPuntero);
+            randomAccessFile.writeUTF(String.valueOf(numeroCanciones));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        posicionPuntero = buscarCancionListaReproduccion(nombreCancion, rutaListaDeReproduccion);
 
         //Si la lista existe la mostramos por pantalla
         if( listaReproduccion.exists() )
         {
             try
             {
-                //Abrimos el fichero
-                randomAccessFile = new RandomAccessFile(listaReproduccion, "rw");
 
                 //Movemos el puntero a la posicion donde se encuentra la cancion
                 randomAccessFile.seek(posicionPuntero);
@@ -492,13 +582,17 @@ public class GestionListaReproduccion
 
                 do
                 {
-                    mostrarCancionesExistentes(".");
-
+                    mostrarCancionesExistentes(listaCanciones);
                     do
                     {
                         System.out.print("Introduce el numero de la cancion que quieres añadir: ");
                         numeroCancionSeleccionada = scanner.nextInt();
-                    } while (numeroCancionSeleccionada < 0 && numeroCancionSeleccionada > listaCanciones.size() );
+
+                        if ( listaCanciones.get(numeroCancionSeleccionada - 1).getBytes().length > 100 )
+                        {
+                            System.out.println("La ruta del fichero es demasiado larga, maximo 100 caracteres");
+                        }
+                    } while ((numeroCancionSeleccionada < 0 && numeroCancionSeleccionada > listaCanciones.size()) || listaCanciones.get(numeroCancionSeleccionada - 1).getBytes().length > 100);
 
                     try
                     {
@@ -562,6 +656,39 @@ public class GestionListaReproduccion
         return listaCreadaCorrectamente;
     }
 
+    public void mostrarContenidoListaReproduccion()
+    {
+        char respuestaUsuario;
+        Scanner scanner = new Scanner(System.in);
+        int listaSeleccionada;
+
+        ArrayList<String> listaListasReproduccion = devolverListadoFicherosLista(".");
+
+        do
+            {
+            //Pedimos
+            System.out.println("Estas son las listas disponibles: ");
+            mostrarListasReproduccionExistentes(listaListasReproduccion);
+
+            do
+            {
+                System.out.print("Introduzca el numero de la lista a la que quiere agregar canciones: ");
+                listaSeleccionada = scanner.nextInt();
+            }
+            while (listaSeleccionada < 0 || listaSeleccionada > listaListasReproduccion.size());
+            System.out.println("Usted ha seleccionado la lista " + listaListasReproduccion.get(listaSeleccionada - 1) + "\n");
+
+            mostrarCancionesListaReproduccion(listaListasReproduccion.get(listaSeleccionada - 1));
+
+            //Preguntamos si quiere añadir mas cancionesd
+            do
+            {
+                System.out.print("Desea mostrar el contenido de otra lista(s/n)?: ");
+                respuestaUsuario  = Character.toLowerCase(scanner.next().charAt(0));
+            } while ( respuestaUsuario != 's' && respuestaUsuario != 'n' );
+        } while ( respuestaUsuario == 's' );
+    }
+
     public void mostrarCancionesListaReproduccion(String rutaListaDeReproduccion)
     {
         //Variables para leer la lista
@@ -572,6 +699,7 @@ public class GestionListaReproduccion
         int posicionPuntero = 0;
 
         String cancionActual;
+        String rutaDescompuesta[];
 
         //Si la lista existe la mostramos por pantalla
         if( UtilFicheros.ficheroEsListaReproduccion(rutaListaDeReproduccion) )
@@ -595,7 +723,11 @@ public class GestionListaReproduccion
 
                     if ( UtilFicheros.ficheroEsCancion(cancionActual))
                     {
-                        System.out.println((i + 1) + ". " + cancionActual);
+
+                        //Dividimos la ruta usando como separador la /
+                        rutaDescompuesta = cancionActual.split("/");
+
+                        System.out.println("\t"+(i + 1) + ". " + rutaDescompuesta[rutaDescompuesta.length - 1]);
                     }
 
 
@@ -631,10 +763,10 @@ public class GestionListaReproduccion
         String rutaCancion;
         String [] rutaCancionDescompuesta;
 
-        int posicionCancionEncontrada = 0;
+        int posicionCancionEncontrada = -1;
         boolean cancionEncontrada = false;
 
-        int posicionPuntero = -1;
+        int posicionPuntero = 0;
 
         //Si la lista existe
         if( listaReproduccion.exists() == true )
@@ -646,9 +778,6 @@ public class GestionListaReproduccion
                 //Leemos el numero de canciones que tiene la lista
                 randomAccessFile.seek(posicionPuntero);
                 numeroCanciones = Integer.parseInt(randomAccessFile.readUTF());
-
-                //Ponemos el puntero al principio
-                posicionPuntero = 0;
 
                 //Recorremos el fichero hasta el final mientras no encontremos el elemento
                 for ( int i = 0; i < numeroCanciones && !cancionEncontrada; i++)
@@ -748,6 +877,37 @@ public class GestionListaReproduccion
         return resultadoBorrado;
     }
 
+    public void seleccionarListaParaReproducir()
+    {
+        char respuestaUsuario;
+        Scanner scanner = new Scanner(System.in);
+        int listaSeleccionada;
+        ArrayList<String> listaListasReproduccion = devolverListadoFicherosLista(".");
+
+        do
+        {
+            //Pedimos
+            System.out.println("Estas son las listas disponibles: ");
+            mostrarListasReproduccionExistentes(listaListasReproduccion);
+
+            do
+            {
+                System.out.println("Introduzca el numero de la lista a la que quiere agregar canciones");
+                listaSeleccionada = scanner.nextInt();
+            } while (listaSeleccionada < 0 || listaSeleccionada > listaListasReproduccion.size() );
+            System.out.println("Usted ha seleccionado la lista "+listaListasReproduccion.get(listaSeleccionada - 1)+"\n");
+
+            reproducirListaReproduccion(listaListasReproduccion.get(listaSeleccionada - 1));
+
+            //Preguntamos si quiere reproducir otra lista
+            do
+            {
+                System.out.print("Desea reproducir otra lista(s/n)?: ");
+                respuestaUsuario  = Character.toLowerCase(scanner.next().charAt(0));
+            } while ( respuestaUsuario != 's' && respuestaUsuario != 'n' );
+
+        } while ( respuestaUsuario == 's' );
+    }
 
     public void reproducirListaReproduccion(String rutaListaDeReproduccion)
     {
@@ -758,8 +918,11 @@ public class GestionListaReproduccion
         CancionImpl cancionActual = new CancionImpl();
         ReproductorImpl reproductor = new ReproductorImpl();
 
+        ListaDeReproduccionImpl listaDeReproduccion = leerFicheroListaReproduccion(rutaListaDeReproduccion);
+
         int numeroCanciones;
         String nombreListaReproduccion;
+        String rutaCancion;
 
         int posicionPuntero = 0;
 
@@ -788,15 +951,15 @@ public class GestionListaReproduccion
                 {
                     posicionPuntero += 100;
                     randomAccessFile.seek(posicionPuntero);
-                    String a = randomAccessFile.readUTF();
-                    System.out.println(a);
-                    cancionActual.setRuta(a);
+                    rutaCancion = randomAccessFile.readUTF();
 
+                    if ( UtilFicheros.ficheroEsCancion(rutaCancion))
+                    {
+                        cancionActual.setRuta(rutaCancion);
+                    }
 
                     //Reproducimos la cancion
                     reproductor.reproducirCancion(cancionActual);
-
-
 
                     while ( Math.round(reproductor.getReproductor().getMediaTime().getSeconds()) < Math.round(reproductor.getReproductor().getDuration().getSeconds()))
                     {
@@ -805,22 +968,27 @@ public class GestionListaReproduccion
                         System.out.println("Lista de reproduccion: "+nombreListaReproduccion+"\n");
                         for (int j = 0; j < numeroCanciones; j++)
                         {
-                            String mensaje = " ";
-
-                                mensaje = " Reproduciendo: "+(j+1)+". "+cancionActual.getNombreFichero();
-
-                             System.out.println(mensaje+"\n");
+                            if ( listaDeReproduccion.getListaCanciones().get(j).getNombreFichero().compareTo(cancionActual.getNombreFichero()) == 0)
+                            {
+                                System.out.println("Reproduciendo: "+(j+1)+". "+cancionActual.getNombreFichero());
+                            }
+                            else
+                            {
+                                System.out.println((j+1)+". "+cancionActual.getNombreFichero());
+                            }
                         }
                     }
-
                 }
-
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 e.printStackTrace();
-            } catch (CancionException e) {
+            }
+            catch (CancionException e)
+            {
                 e.printStackTrace();
-            } finally
+            }
+            finally
             {
                 //Cerramos el fichero
                 try

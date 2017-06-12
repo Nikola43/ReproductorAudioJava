@@ -34,7 +34,8 @@ public class ListaDeReproduccionImpl implements ListaDeReproduccion, Cloneable, 
     //CONSTRUCTOR SOBRECARGADO
     public ListaDeReproduccionImpl(String nombre, ArrayList<CancionImpl> listaCanciones) throws ListaDeReproduccionException {
 
-        if (UtilFicheros.ficheroEsListaReproduccion(nombre))
+        String extensionFichero = "."+nombre.charAt(nombre.length() - 3)+nombre.charAt(nombre.length() - 2)+nombre.charAt(nombre.length() - 1);
+        if (extensionFichero.compareTo(".lis") == 0)
         {
             this.nombre = nombre;
         }
@@ -107,7 +108,8 @@ public class ListaDeReproduccionImpl implements ListaDeReproduccion, Cloneable, 
     @Override
     public void setNombre(String nombre) throws ListaDeReproduccionException
     {
-        if (UtilFicheros.ficheroEsListaReproduccion(nombre))
+        String extensionFichero = "."+nombre.charAt(nombre.length() - 3)+nombre.charAt(nombre.length() - 2)+nombre.charAt(nombre.length() - 1);
+        if (extensionFichero.compareTo(".lis") == 0)
         {
             this.nombre = nombre;
         }

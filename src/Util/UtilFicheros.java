@@ -42,7 +42,6 @@ public class UtilFicheros
             if (extensionFichero.compareTo(".mp3") == 0 || extensionFichero.compareTo(".wav") == 0)
             {
 
-
                 soyCancion = true;
             }
         }

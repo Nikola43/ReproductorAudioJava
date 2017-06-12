@@ -30,10 +30,11 @@ public class TestGestionListaReproduccion
         //gestionListaReproduccion.mostrarCancionesDisponibles("Canciones/");
 
         //Test seleccionar cancion
-        gestionListaReproduccion.crearListaReproduccion();
-        //gestionListaReproduccion.insertarCancionListaReproduccion("dance.mp3", "pauloSoares.lis");
+        //gestionListaReproduccion.crearListaReproduccion();
+        //gestionListaReproduccion.insertarCancionListaReproduccion("dance.mp3", "kakaroto.lis");
         gestionListaReproduccion.mostrarCancionesListaReproduccion("kakaroto.lis");
-        gestionListaReproduccion.reproducirListaReproduccion("kakaroto.lis");
+        //gestionListaReproduccion.eliminarCancionesListaReproduccion();
+        //gestionListaReproduccion.reproducirListaReproduccion("kakaroto.lis");
         //System.out.println("Interfaces.Cancion: "+gestionListaReproduccion.seleccionarCancion());
         //System.out.println(gestionListaReproduccion.buscarCancionListaReproduccion("Maybe.mp3", "pauloSoares.lis"));
         //gestionListaReproduccion.marcarCancionListaReproduccion("Maybe.mp3", "pauloSoares.lis");

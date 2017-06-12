@@ -1,6 +1,8 @@
 package Clases;
 
 import Interfaces.Reproductor;
+import Util.UtilFicheros;
+
 import javax.media.*;
 import javax.media.format.AudioFormat;
 import java.io.IOException;
@@ -129,8 +131,10 @@ public void reproducirCancion(CancionImpl cancion)
 
     try
     {
-        //reproductor = Manager.createPlayer(new URL(cancion.getRuta()));
-        reproductor = Manager.createPlayer(new URL(cancion.getRuta()));
+        if (UtilFicheros.ficheroEsCancion(cancion.getRuta()))
+        {
+            reproductor = Manager.createPlayer(new URL(cancion.getRuta()));
+        }
     }
     catch (IOException e)
     {
