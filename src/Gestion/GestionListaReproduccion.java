@@ -407,7 +407,7 @@ public class GestionListaReproduccion
         posicionPuntero = buscarCancionListaReproduccion(nombreCancion, rutaListaDeReproduccion);
 
         //Si la lista existe la mostramos por pantalla
-        if( listaReproduccion.exists() )
+        if( listaReproduccion.exists() && posicionPuntero != -1 )
         {
             try
             {
@@ -419,7 +419,7 @@ public class GestionListaReproduccion
                 cancionAuxiliar = randomAccessFile.readUTF();
 
                 //Marcamos la cancion con un * al final
-                cancionAuxiliar += '*';
+                cancionAuxiliar += "*";
 
                 //Volvemos a la posicion donde estaba la cancion
                 randomAccessFile.seek(posicionPuntero);
@@ -672,7 +672,7 @@ public class GestionListaReproduccion
 
             do
             {
-                System.out.print("Introduzca el numero de la lista a la que quiere agregar canciones: ");
+                System.out.print("Introduzca el numero de la lista que quiere mostrar: ");
                 listaSeleccionada = scanner.nextInt();
             }
             while (listaSeleccionada < 0 || listaSeleccionada > listaListasReproduccion.size());
@@ -696,6 +696,7 @@ public class GestionListaReproduccion
         RandomAccessFile randomAccessFile = null;
 
         int numeroCanciones;
+        int contadorCancionesValidas = 0;
         int posicionPuntero = 0;
 
         String cancionActual;
@@ -709,28 +710,29 @@ public class GestionListaReproduccion
                 randomAccessFile = new RandomAccessFile(listaReproduccion, "r");
 
                 //Leemos el numero de canciones
-                randomAccessFile.seek(posicionPuntero);
+                //randomAccessFile.seek(posicionPuntero);
                 numeroCanciones = Integer.parseInt(randomAccessFile.readUTF());
 
                 //Volvemos al principio
                 posicionPuntero = 0;
 
-                for ( int i = 0; i < numeroCanciones; i++)
+                while (contadorCancionesValidas < numeroCanciones)
                 {
                     posicionPuntero += 100;
                     randomAccessFile.seek(posicionPuntero);
                     cancionActual = randomAccessFile.readUTF();
 
-                    if ( UtilFicheros.ficheroEsCancion(cancionActual))
+                    if ( cancionActual.compareTo("") != 0)
                     {
+                        if ( UtilFicheros.ficheroEsCancion(cancionActual))
+                        {
+                            contadorCancionesValidas++;
+                            //Dividimos la ruta usando como separador la /
+                            rutaDescompuesta = cancionActual.split("/");
 
-                        //Dividimos la ruta usando como separador la /
-                        rutaDescompuesta = cancionActual.split("/");
-
-                        System.out.println("\t"+(i + 1) + ". " + rutaDescompuesta[rutaDescompuesta.length - 1]);
+                            System.out.println("\t"+(contadorCancionesValidas + 1) + ".. " + rutaDescompuesta[rutaDescompuesta.length - 1]);
+                        }
                     }
-
-
                 }
             }
             catch (IOException e)
@@ -974,7 +976,7 @@ public class GestionListaReproduccion
                             }
                             else
                             {
-                                System.out.println((j+1)+". "+cancionActual.getNombreFichero());
+                                System.out.println((j+1)+". "+listaDeReproduccion.getListaCanciones().get(j).getNombreFichero());
                             }
                         }
                     }
