@@ -65,7 +65,14 @@ public class Main
 
        SI OPCION MENU DISTINTO SALIR
            SEGUN OPCION MENU
-               CASO 1 : VER ALUMNOS EN EL SISTEMA
+               CASO 1. Mostrar listas de reproduccion existentes
+               CASO 2. Mostrar contenido lista de reproduccion
+               CASO 3. Crear lista de reproducción
+               CASO 4. Borrar lista de reproducción
+               CASO 5. Insertar cancion en lista de reproducción
+               CASO 6. Eliminar cancion de lista de reproducción
+               CASO 7. Reproducir lista de reproducción
+               CASO 8. Actualizar fichero reproduccion
            FIN_SEGUN
 
            HACER
@@ -169,6 +176,7 @@ public class Main
         System.out.println("5. Insertar cancion en lista de reproducción");
         System.out.println("6. Eliminar cancion de lista de reproducción");
         System.out.println("7. Reproducir lista de reproducción");
-        System.out.println("8. Salir");
+        System.out.println("8. Actualizar fichero reproduccion");
+        System.out.println("9. Salir");
     }
 }

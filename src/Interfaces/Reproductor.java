@@ -10,7 +10,6 @@ PROPIEDADES
         Player reproductor | consultable
 
     DERIVADAS
-        int estadoActual
 
     COMPARTIDAS
         -

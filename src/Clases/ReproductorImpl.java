@@ -95,7 +95,7 @@ public class ReproductorImpl implements Reproductor, Serializable
 //------------------------------- METODOS AÑADIDOS -------------------------------------------//
 
 	/* INTERFAZ
-	 * Cabecera:        reproducir(Clases.CancionImpl cancion)
+	 * Cabecera:        reproducir(CancionImpl cancion)
 	 * Descripcion:     Reproduce en los altavoces un fichero de audio. mp3, wav, ogg...
 	 * Precondiciones:  El fichero debe ser un fichero de audio con un formato valido.
 	 * Entradas:        Objeto con el nombre y la ruta del fichero.
@@ -153,7 +153,7 @@ public void reproducirCancion(CancionImpl cancion)
     /*INTERFAZ
      * Cabecera:        pararReproduccion()
      * Descripcion:     Para la reproduccion del fichero
-     * Precondiciones:  El fichero debe estar reproduciendose
+     * Precondiciones:  Ninguna
      * Entradas:        Ninguna
      * Salidas:		    Ninguna
      * Postcondiciones: Ninguna
@@ -165,10 +165,9 @@ public void reproducirCancion(CancionImpl cancion)
         reproductor.close();
     }
 
-
     /*INTERFAZ
      * Cabecera:        pausarReproduccion()
-     * Descripcion:     Crear un fichero binario y escribe objetos en el
+     * Descripcion:     Pausa la reproduccion
      * Precondiciones:  Ninguna
      * Entradas:        Ninguna
      * Salidas:		    Ninguna
@@ -181,7 +180,7 @@ public void reproducirCancion(CancionImpl cancion)
     }
 
     /*INTERFAZ
-     * Cabecera:        irPosicion(int posicion)
+     * Cabecera:        public void rebobinarAtras(int posicion)
      * Descripcion:     Dirige el reproductor a una posicion concreta del audio
      * Precondiciones:  La posicion indicada debe estar en el rango de tiempo del fichero
      * Entradas:        La posicion a la que se quiere dirigir
@@ -200,6 +199,14 @@ public void reproducirCancion(CancionImpl cancion)
         }
     }
 
+    /*INTERFAZ
+     * Cabecera:        public void rebobinarAdelante(int posicion)
+     * Descripcion:     Dirige el reproductor a una posicion concreta del audio
+     * Precondiciones:  La posicion indicada debe estar en el rango de tiempo del fichero
+     * Entradas:        La posicion a la que se quiere dirigir
+     * Salidas:		    Ninguna
+     * Postcondiciones: Ninguna
+    */
     @Override
     public void rebobinarAdelante(int posicion)
     {
@@ -214,9 +221,9 @@ public void reproducirCancion(CancionImpl cancion)
 
 
         /*INTERFAZ
- * Cabecera:        continuarReproduccion()
+ * Cabecera:        reanudarReproduccion()
  * Descripcion:     Reanuda la reproduccion del fichero que se estaba reproduciendo
- * Precondiciones:  El fichero debe estar abierto, pero en pausa.
+ * Precondiciones:  Ninguna
  * Entradas:        Ninguna
  * Salidas:		    Reproduccion del fichero por los altavoces
  * Postcondiciones: Ninguna
@@ -228,6 +235,14 @@ public void reproducirCancion(CancionImpl cancion)
         reproductor.start();
     }
 
+    /*INTERFAZ
+    * Cabecera:        public void mostrarReproduccionActual(CancionImpl cancionActual)
+    * Descripcion:     Muestra la barra de reproduccion y la informacion de la cancion mientras reproduce
+    * Precondiciones:  Ninguna
+    * Entradas:        Una cancion
+    * Salidas:		   Ninguna
+    * Postcondiciones: Ninguna
+    */
     public void mostrarReproduccionActual(CancionImpl cancionActual)
     {
 
@@ -305,16 +320,22 @@ public void reproducirCancion(CancionImpl cancion)
         //cuando ambos sean iguales quiere decir que el video a alcanzado el final de la reproduccion
     }
 
-
+    /*INTERFAZ
+        * Cabecera:        public void manejarReproduccion()
+        * Descripcion:     Permite manejar la reproduccion, rebobinar, pausar y parar
+        * Precondiciones:  Ninguna
+        * Entradas:        Ninguna
+        * Salidas:		   Ninguna
+        * Postcondiciones: Ninguna
+        */
     public void manejarReproduccion()
     {
         final int TECLA_FLECHA_DERECHA   = 77;
         final int TECLA_FLECHA_IZQUIERDA = 75;
-        final int TECLA_FLECHA_ARRIBA    = 72;
-        final int TECLA_FLECHA_ABAJO     = 80;
 
         final int TECLA_P     = 112;
         final int TECLA_R     = 114;
+        final int TECLA_X = 120;
 
         int tecla;
 
@@ -328,14 +349,21 @@ public void reproducirCancion(CancionImpl cancion)
             {
                 case TECLA_FLECHA_DERECHA    : rebobinarAdelante(10);break;
                 case TECLA_FLECHA_IZQUIERDA  : rebobinarAtras(10); break;
-                case TECLA_FLECHA_ARRIBA     : System.out.println("up"); break;
-                case TECLA_FLECHA_ABAJO      : System.out.println("down"); break;
-                case TECLA_P      : pausarReproduccion(); break;
+                case TECLA_X                 : pararReproduccion(); break;
+                case TECLA_P                 : pausarReproduccion(); break;
                 case TECLA_R      : reanudarReproduccion(); break;
             }
         }
     }
 
+    /*INTERFAZ
+        * Cabecera:        private void refescarBarraProgreso()
+        * Descripcion:     limpia la consola
+        * Precondiciones:  Ninguna
+        * Entradas:        Ninguna
+        * Salidas:		   Ninguna
+        * Postcondiciones: Ninguna
+        */
     private void refescarBarraProgreso()
     {
         try
